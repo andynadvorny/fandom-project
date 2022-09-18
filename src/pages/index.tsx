@@ -14,7 +14,7 @@ export default function Home() {
     if (user) {
       router.push('/dashboard')
     }
-  }, [])
+  }, [user])
   
   return (
     <Flex direction="column" h="100vh">
