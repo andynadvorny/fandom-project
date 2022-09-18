@@ -1,10 +1,13 @@
+import { useContext, useEffect } from 'react'
 import type { NextPage } from 'next'
 import NextLink from 'next/link'
+import { useRouter } from 'next/router'
 import { Flex, Stack, Link, Text, Button} from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 
+import { UserContext } from '../contexts/UserContext'
 import { Input } from '../components/Form/Input'
 
 const LoginFormSchema = yup.object().shape({
@@ -13,13 +16,22 @@ const LoginFormSchema = yup.object().shape({
 })
 
 const Home: NextPage = () => {
+  const router = useRouter()
+  const { user, signIn } = useContext(UserContext);
+
+  useEffect(() => {
+    if (user) {
+      router.push('/dashboard')
+    }
+  }, [user])
+  
   const { register, handleSubmit, formState } = useForm({
     resolver: yupResolver(LoginFormSchema)
   });
   const errors = formState.errors
 
   function handleSignIn(data: any) {
-    console.log(data)
+    signIn(data.email, data.password)
   }
 
   return (
