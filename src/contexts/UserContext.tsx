@@ -5,6 +5,8 @@ import { toast } from 'react-toastify'
 type UserContextData = {
   user: User | undefined;
   signIn: (user: string, password: string) => void;
+  signOut: () => void;
+  createUser: (name: string, email:string, password:string) => void;
 }
 
 type User = {
@@ -55,10 +57,49 @@ export function UserProvider({ children }: UserContextProviderProps) {
     }
   }
 
+  function signOut() {
+    setUser(undefined)
+  }
+
+  async function createUser(name: string, email:string, password:string) {
+    const url = '/user'
+
+    try {
+      const response = await axios.post(url, {
+        fullName: name,
+        email: email,
+        password: password,
+      })
+  
+      if (response.status === 201) {
+  
+        const userData = {
+          name: response.data.body.fullName,
+          id: response.data.body.userId,
+          email: response.data.body.email,
+          bio: response.data.body.bio,
+          avatar: response.data.body.profileAvatar,
+          slug: response.data.body.slug
+        }
+  
+        setUser(userData)    
+
+        toast.success(response.data.message)
+      } 
+    } catch (e: any) {
+        
+      const errorMessage = e.response.data.message       
+
+      toast.error(errorMessage)
+    }
+  }
+
   return (
     <UserContext.Provider value={{
       user,
       signIn,
+      signOut,
+      createUser
     }}>
       {children}
     </UserContext.Provider>
