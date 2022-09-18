@@ -7,11 +7,20 @@ type UserContextData = {
   signIn: (user: string, password: string) => void;
   signOut: () => void;
   createUser: (name: string, email:string, password:string) => void;
+  editUser: (user: UpdatedUser) => void;
 }
 
 type User = {
   name: string;
   id: string;
+  email: string;
+  bio: string;
+  avatar: string;
+  slug: string;
+}
+
+type UpdatedUser = {
+  name: string;
   email: string;
   bio: string;
   avatar: string;
@@ -94,12 +103,48 @@ export function UserProvider({ children }: UserContextProviderProps) {
     }
   }
 
+  async function editUser(updatedUser: UpdatedUser) {
+    const url = `/user/${user?.id}`
+
+    try {
+      const response = await axios.put(url, {
+        fullName: updatedUser.name,
+        email: updatedUser.email,
+        bio: updatedUser.bio,
+        profileAvatar: updatedUser.avatar,
+        slug: updatedUser.slug
+      })
+  
+      if (response.status === 200) {
+  
+        const userData = {
+          name: response.data.body.fullName,
+          id: response.data.body.userId,
+          email: response.data.body.email,
+          bio: response.data.body.bio,
+          avatar: response.data.body.profileAvatar,
+          slug: response.data.body.slug
+        }
+  
+        setUser(userData)    
+
+        toast.success("Your profile data was updated!")
+      } 
+    } catch (e: any) {
+        
+      const errorMessage = e.response.data.message       
+
+      toast.error(errorMessage)
+    }
+  }
+
   return (
     <UserContext.Provider value={{
       user,
       signIn,
       signOut,
-      createUser
+      createUser,
+      editUser
     }}>
       {children}
     </UserContext.Provider>
