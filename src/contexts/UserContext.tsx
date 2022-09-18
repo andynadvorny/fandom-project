@@ -1,5 +1,6 @@
 import { ReactNode, createContext, useState } from "react"
 import axios from '../api/axios'
+import { toast } from 'react-toastify'
 
 type UserContextData = {
   user: User | undefined;
@@ -47,8 +48,10 @@ export function UserProvider({ children }: UserContextProviderProps) {
         setUser(userData)
       } 
     } catch (e: any) {
-        
-      console.error(e)
+
+      const errorMessage = e.response.data.message       
+
+      toast.error(errorMessage)
     }
   }
 
