@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useState } from "react"
+import { ReactNode, createContext, useState, useEffect } from "react"
 import axios from '../api/axios'
 import { toast } from 'react-toastify'
 
@@ -36,6 +36,26 @@ export const UserContext = createContext({} as UserContextData)
 export function UserProvider({ children }: UserContextProviderProps) {
   const [user, setUser] = useState<User>()
 
+  useEffect(() => {
+    const loggedInUser = localStorage.getItem("user");
+
+    if (loggedInUser) {
+      const foundUser = JSON.parse(loggedInUser);
+      setUser(foundUser);
+    }
+  }, [])
+
+  /*
+  {
+    name: 'Andy Nadvorny',
+    id: '1',
+    email: 'andy@email.com',
+    bio: '',
+    avatar: '',
+    slug: ''
+  }
+  */
+
   async function signIn(email: string, password: string) {
     const url = '/user/authentication'
 
@@ -57,6 +77,7 @@ export function UserProvider({ children }: UserContextProviderProps) {
         }
   
         setUser(userData)
+        localStorage.setItem('user', JSON.stringify(userData))
       } 
     } catch (e: any) {
 
@@ -68,6 +89,7 @@ export function UserProvider({ children }: UserContextProviderProps) {
 
   function signOut() {
     setUser(undefined)
+    localStorage.removeItem('user')
   }
 
   async function createUser(name: string, email:string, password:string) {
@@ -91,7 +113,8 @@ export function UserProvider({ children }: UserContextProviderProps) {
           slug: response.data.body.slug
         }
   
-        setUser(userData)    
+        setUser(userData)  
+        localStorage.setItem('user', JSON.stringify(userData))   
 
         toast.success(response.data.message)
       } 
@@ -127,6 +150,7 @@ export function UserProvider({ children }: UserContextProviderProps) {
         }
   
         setUser(userData)    
+        localStorage.setItem('user', JSON.stringify(userData))  
 
         toast.success("Your profile data was updated!")
       } 
