@@ -1,6 +1,9 @@
 import { ReactNode, createContext, useState, useEffect } from "react"
-import axios from '../api/axios'
+import Router from 'next/router';
 import { toast } from 'react-toastify'
+import { setCookie, parseCookies, destroyCookie } from 'nookies' 
+
+import axios from '../api/axios'
 
 type UserContextData = {
   user: User | undefined;
@@ -37,10 +40,10 @@ export function UserProvider({ children }: UserContextProviderProps) {
   const [user, setUser] = useState<User>()
 
   useEffect(() => {
-    const loggedInUser = localStorage.getItem("user");
+    const { 'user': loggedUser } = parseCookies()
 
-    if (loggedInUser) {
-      const foundUser = JSON.parse(loggedInUser);
+    if (loggedUser) {
+      const foundUser = JSON.parse(loggedUser);
       setUser(foundUser);
     }
   }, [])
@@ -77,7 +80,7 @@ export function UserProvider({ children }: UserContextProviderProps) {
         }
   
         setUser(userData)
-        localStorage.setItem('user', JSON.stringify(userData))
+        setCookie(undefined, 'user', JSON.stringify(userData))
       } 
     } catch (e: any) {
 
@@ -89,7 +92,9 @@ export function UserProvider({ children }: UserContextProviderProps) {
 
   function signOut() {
     setUser(undefined)
-    localStorage.removeItem('user')
+    destroyCookie(undefined, 'user')
+
+    Router.push('/')
   }
 
   async function createUser(name: string, email:string, password:string) {
@@ -114,7 +119,7 @@ export function UserProvider({ children }: UserContextProviderProps) {
         }
   
         setUser(userData)  
-        localStorage.setItem('user', JSON.stringify(userData))   
+        setCookie(undefined, 'user', JSON.stringify(userData))   
 
         toast.success(response.data.message)
       } 
@@ -150,7 +155,7 @@ export function UserProvider({ children }: UserContextProviderProps) {
         }
   
         setUser(userData)    
-        localStorage.setItem('user', JSON.stringify(userData))  
+        setCookie(undefined, 'user', JSON.stringify(userData))  
 
         toast.success("Your profile data was updated!")
       } 
