@@ -40,7 +40,7 @@ export function UserProvider({ children }: UserContextProviderProps) {
   const [user, setUser] = useState<User>()
 
   useEffect(() => {
-    const { 'user': loggedUser } = parseCookies()
+    const { 'fandomproject.user': loggedUser } = parseCookies()
 
     if (loggedUser) {
       const foundUser = JSON.parse(loggedUser);
@@ -80,7 +80,7 @@ export function UserProvider({ children }: UserContextProviderProps) {
         }
   
         setUser(userData)
-        setCookie(undefined, 'user', JSON.stringify(userData))
+        setCookie(undefined, 'fandomproject.user', JSON.stringify(userData))
       } 
     } catch (e: any) {
 
@@ -92,7 +92,7 @@ export function UserProvider({ children }: UserContextProviderProps) {
 
   function signOut() {
     setUser(undefined)
-    destroyCookie(undefined, 'user')
+    destroyCookie(undefined, 'fandomproject.user')
 
     Router.push('/')
   }
@@ -119,7 +119,7 @@ export function UserProvider({ children }: UserContextProviderProps) {
         }
   
         setUser(userData)  
-        setCookie(undefined, 'user', JSON.stringify(userData))   
+        setCookie(undefined, 'fandomproject.user', JSON.stringify(userData))   
 
         toast.success(response.data.message)
       } 
@@ -155,7 +155,7 @@ export function UserProvider({ children }: UserContextProviderProps) {
         }
   
         setUser(userData)    
-        setCookie(undefined, 'user', JSON.stringify(userData))  
+        setCookie(undefined, 'fandomproject.user', JSON.stringify(userData))  
 
         toast.success("Your profile data was updated!")
       } 

@@ -5,7 +5,7 @@ export function withSSRGuest(fn: GetServerSideProps) {
   return async (ctx: GetServerSidePropsContext) => {
     const cookies = parseCookies(ctx)
 
-    if (cookies['user']) {
+    if (cookies['fandomproject.user']) {
       return {
         redirect: {
           destination: '/dashboard',
