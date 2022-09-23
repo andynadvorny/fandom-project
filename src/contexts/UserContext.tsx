@@ -87,7 +87,7 @@ export function UserProvider({ children }: UserContextProviderProps) {
       } 
     } catch (e: any) {
 
-      const errorMessage = e.response.data.message       
+      const errorMessage = e.response.data == undefined ? e.message : e.response.data.message       
 
       toast.error(errorMessage)
     }

@@ -6,14 +6,13 @@ import { UserProvider } from '../contexts/UserContext'
 import { SidebarDrawerProvider } from '../contexts/SidebarDrawerContext'
 
 import { theme } from '../styles/theme'
+import 'react-toastify/dist/ReactToastify.css'
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider theme={theme}>  
       <UserProvider>
         <SidebarDrawerProvider>
-          <Component {...pageProps} />
-
           <ToastContainer
             position="top-right"
             autoClose={5000}
@@ -26,6 +25,8 @@ function MyApp({ Component, pageProps }: AppProps) {
             pauseOnHover
             theme="colored"
           />
+
+          <Component {...pageProps} />
         </SidebarDrawerProvider>
       </UserProvider>
     </ChakraProvider>
