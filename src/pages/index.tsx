@@ -1,21 +1,10 @@
-import { useContext, useEffect } from 'react'
 import NextLink from 'next/link'
-import { useRouter } from 'next/router'
 import { Flex, Image, Box, Text, Button, Heading} from '@chakra-ui/react'
 
-import { UserContext } from '../contexts/UserContext'
+import { withSSRGuest } from '../utils/withSSRGuest'
 import { Header } from '../components/Header'
 
 export default function Home() {
-  const { user } = useContext(UserContext)
-  const router = useRouter()
-
-  useEffect(() => {
-    if (user) {
-      router.push('/dashboard')
-    }
-  }, [user])
-  
   return (
     <Flex direction="column" h="100vh">
       <Header />
@@ -49,7 +38,7 @@ export default function Home() {
               colorScheme="orange" 
               mt="6"
             >
-              Get started
+              Create account
             </Button>
           </NextLink>
         </Flex>
@@ -63,3 +52,9 @@ export default function Home() {
     </Flex>
   )
 }
+
+export const getServerSideProps = withSSRGuest(async (ctx) => {
+  return {
+    props: {}
+  }
+})
