@@ -112,22 +112,9 @@ export function UserProvider({ children }: UserContextProviderProps) {
   
       if (response.status === 201) {
   
-        const userData = {
-          name: response.data.body.fullName,
-          id: response.data.body.userId,
-          email: response.data.body.email,
-          bio: response.data.body.bio,
-          avatar: response.data.body.profileAvatar,
-          slug: response.data.body.slug
-        }
-  
-        setUser(userData)  
-        setCookie(undefined, 'fandomproject.user', JSON.stringify(userData), {
-          maxAge: 60 * 60 * 24 * 30, // 30 days
-          path: '/' // global access to all app
-        })   
-
         toast.success(response.data.message)
+
+        Router.push('/login')
       } 
     } catch (e: any) {
         
