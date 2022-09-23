@@ -26,8 +26,8 @@ export default function SignUp() {
   })
   const errors = formState.errors
 
-  function handleCreateUser(data: any) {
-    createUser(data.name, data.email, data.password)
+  async function handleCreateUser(data: any) {
+    await createUser(data.name, data.email, data.password)
   }
 
   return (

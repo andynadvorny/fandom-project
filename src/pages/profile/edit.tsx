@@ -33,7 +33,7 @@ export default function EditProfile() {
     setValue('avatar', user?.avatar)
   }, [user])
 
-  function handleCreateUser(data: any) {
+  async function handleCreateUser(data: any) {
     
     const updatedUser = {
       name: data.name,
@@ -44,7 +44,7 @@ export default function EditProfile() {
       slug: ''
     }
 
-    editUser(updatedUser)
+    await editUser(updatedUser)
   }
 
   return (

@@ -22,8 +22,8 @@ export default function Login() {
   });
   const errors = formState.errors
 
-  function handleSignIn(data: any) {
-    signIn(data.email, data.password)
+  async function handleSignIn(data: any) {
+    await signIn(data.email, data.password)
   }
 
   return (
