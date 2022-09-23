@@ -1,11 +1,11 @@
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import NextLink from 'next/link'
-import { useRouter } from 'next/router';
 import { Box, Button, Divider, Flex, Heading, HStack, SimpleGrid, VStack } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup'
 
+import { withSSRGuest } from '../utils/withSSRGuest';
 import { UserContext } from '../contexts/UserContext';
 import { Input } from '../components/Form/Input'
 
@@ -19,14 +19,7 @@ const createUserFormSchema = yup.object().shape({
 })
 
 export default function SignUp() {
-  const router = useRouter()
-  const { user, createUser } = useContext(UserContext)
-
-  useEffect(() => {
-    if (user) {
-      router.push('/dashboard')
-    }
-  }, [user])
+  const { createUser } = useContext(UserContext)
   
   const { register, handleSubmit, formState } = useForm({
     resolver: yupResolver(createUserFormSchema)
@@ -111,3 +104,9 @@ export default function SignUp() {
     </Flex>
   )
 }
+
+export const getServerSideProps = withSSRGuest(async (ctx) => {
+  return {
+    props: {}
+  }
+})

@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup'
 
+import { withSSRAuth } from '../../utils/withSSRAuth';
 import { UserContext } from '../../contexts/UserContext';
 import { Header } from '../../components/Header';
 import { Sidebar } from '../../components/Sidebar';
@@ -17,7 +18,7 @@ const createUserFormSchema = yup.object().shape({
   avatar: yup.string()
 })
 
-export default function SignUp() {
+export default function EditProfile() {
   const { user, editUser } = useContext(UserContext)
   
   const { register, setValue, handleSubmit, formState } = useForm({
@@ -120,3 +121,9 @@ export default function SignUp() {
     </Flex>
   )
 }
+
+export const getServerSideProps = withSSRAuth(async (ctx) => {
+  return {
+    props: {}
+  }
+})
