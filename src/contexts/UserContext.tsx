@@ -80,7 +80,10 @@ export function UserProvider({ children }: UserContextProviderProps) {
         }
   
         setUser(userData)
-        setCookie(undefined, 'fandomproject.user', JSON.stringify(userData))
+        setCookie(undefined, 'fandomproject.user', JSON.stringify(userData), {
+          maxAge: 60 * 60 * 24 * 30, // 30 days
+          path: '/' // global access to all app
+        })
       } 
     } catch (e: any) {
 
@@ -119,7 +122,10 @@ export function UserProvider({ children }: UserContextProviderProps) {
         }
   
         setUser(userData)  
-        setCookie(undefined, 'fandomproject.user', JSON.stringify(userData))   
+        setCookie(undefined, 'fandomproject.user', JSON.stringify(userData), {
+          maxAge: 60 * 60 * 24 * 30, // 30 days
+          path: '/' // global access to all app
+        })   
 
         toast.success(response.data.message)
       } 
@@ -155,7 +161,10 @@ export function UserProvider({ children }: UserContextProviderProps) {
         }
   
         setUser(userData)    
-        setCookie(undefined, 'fandomproject.user', JSON.stringify(userData))  
+        setCookie(undefined, 'fandomproject.user', JSON.stringify(userData),{
+          maxAge: 60 * 60 * 24 * 30, // 30 days
+          path: '/' // global access to all app
+        })  
 
         toast.success("Your profile data was updated!")
       } 
