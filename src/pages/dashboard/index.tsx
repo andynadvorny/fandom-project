@@ -1,8 +1,8 @@
 import { Flex } from "@chakra-ui/react"
 
-import { withSSRAuth } from "../utils/withSSRAuth"
-import { Header } from "../components/Header"
-import { Sidebar } from "../components/Sidebar"
+import { withSSRAuth } from "../../utils/withSSRAuth"
+import { Header } from "../../components/Header"
+import { Sidebar } from "../../components/Sidebar"
 
 export default function Dashboard() {
   return (
