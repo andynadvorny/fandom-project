@@ -19,8 +19,8 @@ export function SidebarNav() {
         <Text fontWeight="bold" color="gray.400">GENERAL</Text>
         <Stack spacing="4" mt="8" align="stretch">
           <NavLink href="/dashboard" icon={RiDashboardLine}>Dashboard</NavLink>
-          <NavLink href="/communities" icon={RiBubbleChartLine}>Communities</NavLink>
-          <NavLink href="/feed" icon={RiProfileLine}>News Feed</NavLink>
+          <NavLink href="/dashboard/communities" icon={RiBubbleChartLine}>Communities</NavLink>
+          <NavLink href="/dashboard/feed" icon={RiProfileLine}>News Feed</NavLink>
         </Stack>
       </Box>
       <Box>
