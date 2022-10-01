@@ -14,7 +14,7 @@ export function NavLink({ icon, children, href, ...rest }: NavLinkProps) {
   
   let isActive = false;
 
-  if (asPath.startsWith(String(href)) || asPath.startsWith(String(rest.as))) {
+  if (asPath === href || asPath === rest.as) {
     isActive = true;
   }
 
