@@ -1,31 +1,17 @@
+import { useContext } from 'react'
 import NextLink from 'next/link'
 import { Flex, Box, Heading, Divider, Button, Icon, Text, Avatar, Badge } from "@chakra-ui/react"
 import { motion } from 'framer-motion'
 import { RiAddLine, RiBubbleChartLine } from "react-icons/ri"
 
 //import { withSSRAuth } from "../../utils/withSSRAuth"
+import { CommunitiesContext } from '../../contexts/CommunityContext'
 import { Header } from "../../components/Header"
 import { Sidebar } from "../../components/Sidebar"
 
-const communities = [
-  {
-    id: 1,
-    slug: "bts",
-    name: "BTS",
-    category: "music",
-    members: 37,
-    cover: "https://portalpopline.com.br/wp-content/uploads/2022/08/bts-fas-obsessao-2.jpg"
-  },{
-    id: 2,
-    slug: "bts",
-    name: "BTS",
-    category: "music",
-    members: 37,
-    cover: ""
-  }
-]
-
 export default function Communities() {
+  const { communities } = useContext(CommunitiesContext)
+
   return (
     <Flex direction="column" h="100vh">
       <Header />
@@ -59,9 +45,9 @@ export default function Communities() {
           <Divider my="6" borderColor="gray.700" />
           
           <Flex direction="column" gap={2}>
-            {communities.length > 0 ? (
+            { communities && communities.length > 0 ? (
               communities.map(community => (
-                <NextLink href={`/community/${community.slug}`} key={community.id} passHref>
+                <NextLink href={`/community/${community.slug}`} key={community.communityId} passHref>
                   <Box as ="a">
                     <Flex 
                       as={motion.div}
@@ -76,7 +62,7 @@ export default function Communities() {
                     >
                       <Avatar 
                         icon={<RiBubbleChartLine fontSize="2rem" />} 
-                        src={community.cover} 
+                        src={community.coverImage} 
                         borderRadius={4} 
                         size="lg" 
                       />
@@ -87,10 +73,10 @@ export default function Communities() {
                             {community.name}
                           </Text>
                           <Badge colorScheme='orange' variant="solid">
-                            {community.category}
+                            {community.categoryName}
                           </Badge>
                         </Flex>
-                        <Text fontSize='sm'>{community.members} members</Text>
+                        <Text fontSize='sm'>{community.memberCount} members</Text>
                       </Box>
                     </Flex>
                   </Box>
