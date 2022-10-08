@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react'
 import NextLink from 'next/link'
 import { Flex, Box, Heading, Divider, Button, VStack, HStack } from "@chakra-ui/react"
 import { useForm } from 'react-hook-form'
@@ -6,13 +6,14 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup'
 
 //import { withSSRAuth } from "../../utils/withSSRAuth"
-import { CommunitiesContext } from '../../contexts/CommunityContext';
-import { useCategories } from '../../hooks/useCategories';
+import { CommunitiesContext } from '../../contexts/CommunityContext'
+import { useCategories } from '../../hooks/useCategories'
 import { Header } from "../../components/Header"
 import { Sidebar } from "../../components/Sidebar"
+import { CommunityPreview } from '../../components/CommunityPreview'
 import { Input } from '../../components/Form/Input'
-import { Select } from '../../components/Form/Select';
-import { Textarea } from '../../components/Form/Textarea';
+import { Select } from '../../components/Form/Select'
+import { Textarea } from '../../components/Form/Textarea'
 
 const validUrl = /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm
 
@@ -35,6 +36,10 @@ export default function CreateCommunity() {
   }
 
   const { categories } = useCategories()
+  const [ previewName, setPreviewName ] = useState<string>('My Awesome Community')
+  const [ previewCategory, setPreviewCategory ] = useState<string>('Category')
+  const [ previewCoverImage, setPreviewCoverImage ] = useState<string>('')
+  const [ previewDescription, setPreviewDescription ] = useState<string>("This is what your community will look like. Don't worry, you can change everything later.")
 
   return (
     <Flex direction="column" h="100vh">
@@ -53,6 +58,13 @@ export default function CreateCommunity() {
           <Heading size="lg" fontWeight="normal">Create Community</Heading>
 
           <Divider my="6" borderColor="gray.700" />
+
+          <CommunityPreview
+            name={previewName}
+            categoryName={previewCategory}
+            coverImage={previewCoverImage}
+            description={previewDescription}
+          />
           
           <Box as="form" onSubmit={handleSubmit(handleCreateCommunity)}>
             <VStack spacing="6">
@@ -61,6 +73,7 @@ export default function CreateCommunity() {
                 name="name"
                 label="Name" 
                 error={errors.name}
+                onChange={(e) => {setPreviewName(e.target.value)}}
               />
               
               <Select
@@ -72,6 +85,7 @@ export default function CreateCommunity() {
                   label: category.name
                 }))}
                 error={errors.category}
+                onChange={(e) => {setPreviewCategory(e.target.id)}}
               />
 
               <Input 
@@ -80,6 +94,7 @@ export default function CreateCommunity() {
                 label="Cover image" 
                 error={errors.coverimage}
                 placeholder="https://yourimage.com/image.jpg"
+                onChange={(e) => {setPreviewCoverImage(e.target.value)}}
               />
 
               <Textarea
@@ -87,6 +102,7 @@ export default function CreateCommunity() {
                 name="description" 
                 label="Description" 
                 error={errors.description}
+                onChange={(e) => {setPreviewDescription(e.target.value)}}
               />
             </VStack>
 
