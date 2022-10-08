@@ -4,8 +4,9 @@ import { toast } from 'react-toastify';
 import axios from '../api/axios';
 
 interface Category {
-  id: number;
+  categoryId: number;
   name: string;
+  communityCount: number;
 }
 
 interface CategoriesProviderProps {
@@ -27,7 +28,7 @@ export function CategoriesProvider({ children }: CategoriesProviderProps) {
 
   async function getCategories() {
     try {
-      const response = await axios.get('/category')
+      const response = await axios.get('/categories')
 
       if (response.status === 200) {
   

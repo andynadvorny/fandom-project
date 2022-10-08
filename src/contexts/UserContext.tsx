@@ -84,6 +84,8 @@ export function UserProvider({ children }: UserContextProviderProps) {
           maxAge: 60 * 60 * 24 * 30, // 30 days
           path: '/' // global access to all app
         })
+
+        Router.push('/')
       } 
     } catch (e: any) {
 
