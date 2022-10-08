@@ -4,6 +4,7 @@ import { ToastContainer } from 'react-toastify'
 
 import { UserProvider } from '../contexts/UserContext'
 import { CategoriesProvider } from '../hooks/useCategories'
+import { CommunitiesProvider } from '../contexts/CommunityContext'
 import { SidebarDrawerProvider } from '../contexts/SidebarDrawerContext'
 
 import { theme } from '../styles/theme'
@@ -14,22 +15,24 @@ function MyApp({ Component, pageProps }: AppProps) {
     <ChakraProvider theme={theme}>  
       <UserProvider>
         <CategoriesProvider>
-          <SidebarDrawerProvider>
-            <ToastContainer
-              position="top-right"
-              autoClose={5000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-              theme="colored"
-            />
+          <CommunitiesProvider>
+            <SidebarDrawerProvider>
+              <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="colored"
+              />
 
-            <Component {...pageProps} />
-          </SidebarDrawerProvider>
+              <Component {...pageProps} />
+            </SidebarDrawerProvider>
+          </CommunitiesProvider>
         </CategoriesProvider>
       </UserProvider>
     </ChakraProvider>
