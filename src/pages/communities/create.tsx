@@ -12,6 +12,7 @@ import { Header } from "../../components/Header"
 import { Sidebar } from "../../components/Sidebar"
 import { Input } from '../../components/Form/Input'
 import { Select } from '../../components/Form/Select';
+import { Textarea } from '../../components/Form/Textarea';
 
 const validUrl = /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm
 
@@ -76,16 +77,14 @@ export default function CreateCommunity() {
               <Input 
                 {...register('cover_image')}
                 name="cover_image" 
-                type="cover_image" 
                 label="Cover image" 
                 error={errors.coverimage}
-                placeholder="httpS://yourimage.com/image.jpg"
+                placeholder="https://yourimage.com/image.jpg"
               />
 
-              <Input 
+              <Textarea
                 {...register('description')}
                 name="description" 
-                type="description" 
                 label="Description" 
                 error={errors.description}
               />
