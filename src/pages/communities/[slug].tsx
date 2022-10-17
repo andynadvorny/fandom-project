@@ -1,7 +1,7 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState, useRef, RefObject } from 'react'
 import { useRouter } from "next/router"
 import NextLink from 'next/link'
-import { Flex, Box, Heading, Divider, Button, VStack, HStack, Spinner } from "@chakra-ui/react"
+import { Flex, Box, Heading, Divider, Button, VStack, HStack, Spinner, AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter, useDisclosure } from "@chakra-ui/react"
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -9,6 +9,7 @@ import { RiDeleteBinFill } from "react-icons/ri"
 
 //import { withSSRAuth } from "../../utils/withSSRAuth"
 import { CommunitiesContext } from '../../contexts/CommunityContext'
+import { UserContext } from '../../contexts/UserContext'
 import { useCategories } from '../../hooks/useCategories'
 
 import { Header } from "../../components/Header"
@@ -39,6 +40,7 @@ const createCommunityFormSchema = yup.object().shape({
 
 export default function CreateCommunity() {
   const { getCommunityBySlug, editCommunity, deleteCommunity } = useContext(CommunitiesContext)
+  const { user } = useContext(UserContext)
   const [community, setCommunity] = useState<Community>()
   const { categories } = useCategories()
 
@@ -70,15 +72,19 @@ export default function CreateCommunity() {
   })
   const errors = formState.errors
 
+  const { isOpen, onClose, onOpen } = useDisclosure()
+  const cancelRef = useRef() as RefObject<HTMLButtonElement>
+
   async function handleUpdateCommunity(data: any) {
-    if (community) {
+    if (community && user) {
       const updatedCommunity = {
         ...community,
         name: data.name,
         id: community.communityId,
         categoryId: data.category,
         coverImage: data.coverImage,
-        description: data.description
+        description: data.description,
+        userId: user.id
       }
   
       await editCommunity(updatedCommunity)
@@ -108,7 +114,7 @@ export default function CreateCommunity() {
           <Flex>
             <Heading size="lg" fontWeight="normal">{community?.name}</Heading>
             <Button 
-              onClick={handleDeleteCommunity}
+              onClick={onOpen}
               colorScheme="red"
               ml="auto"
               px={0}
@@ -172,6 +178,33 @@ export default function CreateCommunity() {
           ) : (
             <Spinner />
           )}
+
+          <AlertDialog
+            isOpen={isOpen}
+            leastDestructiveRef={cancelRef}
+            onClose={onClose}
+          >
+            <AlertDialogOverlay>
+              <AlertDialogContent bgColor='gray.900'>
+                <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                  Delete Customer
+                </AlertDialogHeader>
+
+                <AlertDialogBody>
+                  Are you sure you want to delete this community? The data will be lost forever.
+                </AlertDialogBody>
+
+                <AlertDialogFooter>
+                  <Button ref={cancelRef} onClick={onClose} colorScheme="whiteAlpha">
+                    Cancel
+                  </Button>
+                  <Button colorScheme='red' onClick={handleDeleteCommunity} ml={3}>
+                    Delete
+                  </Button>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialogOverlay>
+          </AlertDialog>
         </Box>
       </Flex>
     </Flex>
