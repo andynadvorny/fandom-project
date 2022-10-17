@@ -60,7 +60,7 @@ export function UserProvider({ children }: UserContextProviderProps) {
   */
 
   async function signIn(email: string, password: string) {
-    const url = '/user/authentication'
+    const url = '/users/authentication'
 
     try {
       const response = await axios.post(url, {
@@ -103,7 +103,7 @@ export function UserProvider({ children }: UserContextProviderProps) {
   }
 
   async function createUser(name: string, email:string, password:string) {
-    const url = '/user'
+    const url = '/users'
 
     try {
       const response = await axios.post(url, {
@@ -127,7 +127,7 @@ export function UserProvider({ children }: UserContextProviderProps) {
   }
 
   async function editUser(updatedUser: UpdatedUser) {
-    const url = `/user/${user?.id}`
+    const url = `/users/${user?.id}`
 
     try {
       const response = await axios.put(url, {

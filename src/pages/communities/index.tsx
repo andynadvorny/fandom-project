@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import NextLink from 'next/link'
 import { Flex, Box, Heading, Divider, Button, Icon, Text, Avatar, Badge } from "@chakra-ui/react"
 import { motion } from 'framer-motion'
-import { RiAddLine, RiBubbleChartLine } from "react-icons/ri"
+import { RiAddLine, RiBubbleChartLine, RiPencilLine } from "react-icons/ri"
 
 //import { withSSRAuth } from "../../utils/withSSRAuth"
 import { CommunitiesContext } from '../../contexts/CommunityContext'
@@ -10,7 +10,7 @@ import { Header } from "../../components/Header"
 import { Sidebar } from "../../components/Sidebar"
 
 export default function Communities() {
-  const { communities } = useContext(CommunitiesContext)
+  const { allCommunities, userCommunities } = useContext(CommunitiesContext)
 
   return (
     <Flex direction="column" h="100vh">
@@ -45,42 +45,54 @@ export default function Communities() {
           <Divider my="6" borderColor="gray.700" />
           
           <Flex direction="column" gap={2}>
-            { communities && communities.length > 0 ? (
-              communities.map(community => (
-                <NextLink href={`/community/${community.slug}`} key={community.communityId} passHref>
-                  <Box as ="a">
-                    <Flex 
-                      as={motion.div}
-                      bg="gray.900" 
-                      borderRadius={6} 
-                      p={2} 
-                      alignItems="center"
-                      whileHover={{
-                        scale: 1.03,
-                        transition: { duration: 0.5 },
-                      }}
+            { userCommunities && userCommunities.length > 0 ? (
+              userCommunities.map(community => (
+                <Flex 
+                  as={motion.div}
+                  key={community.communityId}
+                  bg="gray.900" 
+                  borderRadius={6} 
+                  p={2} 
+                  alignItems="center"
+                  whileHover={{
+                    scale: 1.03,
+                    transition: { duration: 0.5 },
+                  }}
+                >
+                  <Avatar 
+                    icon={<RiBubbleChartLine fontSize="2rem" />} 
+                    src={community.coverImage} 
+                    borderRadius={4} 
+                    size="lg" 
+                  />
+                  
+                  <NextLink href={`/community/${community.slug}`} key={community.communityId} passHref>
+                    <Box as='a' ml='3'>
+                      <Flex align="center" gap={2}>
+                        <Text fontWeight='bold' fontSize="xl">
+                          {community.name}
+                        </Text>
+                        <Badge colorScheme='orange' variant="solid">
+                          {community.categoryName}
+                        </Badge>
+                      </Flex>
+                      <Text fontSize='sm'>{community.memberCount} members</Text>
+                    </Box>
+                  </NextLink>
+
+                  <NextLink href={`/communities/${community.slug}`} passHref>
+                    <Button
+                      as="a" 
+                      colorScheme="orange"
+                      variant="ghost"
+                      ml="auto"
+                      px={0}
+                      title="Edit"
                     >
-                      <Avatar 
-                        icon={<RiBubbleChartLine fontSize="2rem" />} 
-                        src={community.coverImage} 
-                        borderRadius={4} 
-                        size="lg" 
-                      />
-                      
-                      <Box ml='3'>
-                        <Flex align="center" gap={2}>
-                          <Text fontWeight='bold' fontSize="xl">
-                            {community.name}
-                          </Text>
-                          <Badge colorScheme='orange' variant="solid">
-                            {community.categoryName}
-                          </Badge>
-                        </Flex>
-                        <Text fontSize='sm'>{community.memberCount} members</Text>
-                      </Box>
-                    </Flex>
-                  </Box>
-                </NextLink>
+                      <RiPencilLine size={18} />
+                    </Button>
+                  </NextLink>
+                </Flex>
               ))
             ) : (
               <Flex

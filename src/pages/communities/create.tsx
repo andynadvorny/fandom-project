@@ -14,6 +14,7 @@ import { CommunityPreview } from '../../components/CommunityPreview'
 import { Input } from '../../components/Form/Input'
 import { Select } from '../../components/Form/Select'
 import { Textarea } from '../../components/Form/Textarea'
+import { UserContext } from '../../contexts/UserContext';
 
 const validUrl = /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm
 
@@ -26,20 +27,27 @@ const createCommunityFormSchema = yup.object().shape({
 
 export default function CreateCommunity() {
   const { createCommunity } = useContext(CommunitiesContext)
+  const { user } = useContext(UserContext)
   const { register, handleSubmit, formState } = useForm({
     resolver: yupResolver(createCommunityFormSchema)
   })
   const errors = formState.errors
 
   async function handleCreateCommunity(data: any) {
-    await createCommunity(data.name, data.category, data.coverimage, data.description)
+    if (user) {
+      await createCommunity(data.name, data.category, data.coverimage, data.description, user.id)
+    }
   }
 
   const { categories } = useCategories()
   const [ previewName, setPreviewName ] = useState<string>('My Awesome Community')
-  const [ previewCategory, setPreviewCategory ] = useState<string>('Category')
   const [ previewCoverImage, setPreviewCoverImage ] = useState<string>('')
   const [ previewDescription, setPreviewDescription ] = useState<string>("This is what your community will look like. Don't worry, you can change everything later.")
+
+  const categoryOptions = categories.map(category => ({
+    value: category.categoryId,
+    label: category.name
+  }))
 
   return (
     <Flex direction="column" h="100vh">
@@ -61,7 +69,7 @@ export default function CreateCommunity() {
 
           <CommunityPreview
             name={previewName}
-            categoryName={previewCategory}
+            categoryName="Category"
             coverImage={previewCoverImage}
             description={previewDescription}
           />
@@ -80,12 +88,8 @@ export default function CreateCommunity() {
                 {...register('category')}
                 name="category"
                 label="Category" 
-                options={categories.map(category => ({
-                  value: category.categoryId,
-                  label: category.name
-                }))}
+                options={categoryOptions}
                 error={errors.category}
-                onChange={(e) => {setPreviewCategory(e.target.id)}}
               />
 
               <Input 
