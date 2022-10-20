@@ -27,7 +27,7 @@ type UpdatedUser = {
   email: string;
   bio: string;
   avatar: string;
-  slug: string;
+  slug: string | undefined;
 }
 
 type UserContextProviderProps = {
@@ -138,7 +138,7 @@ export function UserProvider({ children }: UserContextProviderProps) {
         slug: updatedUser.slug
       })
   
-      if (response.status === 200) {
+      if (response.status === 201) {
   
         const userData = {
           name: response.data.body.fullName,

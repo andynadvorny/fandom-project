@@ -14,8 +14,8 @@ import { Input } from '../../components/Form/Input'
 const createUserFormSchema = yup.object().shape({
   name: yup.string().required('Name is required'),
   email: yup.string().required('Email is required').email('Must be a valid email address'),
-  bio: yup.string(),
-  avatar: yup.string()
+  bio: yup.string().nullable(),
+  avatar: yup.string().nullable()
 })
 
 export default function EditProfile() {
@@ -41,7 +41,7 @@ export default function EditProfile() {
       email: data.email,
       bio: data.bio,
       avatar: data.avatar,
-      slug: ''
+      slug: user?.slug
     }
 
     await editUser(updatedUser)
