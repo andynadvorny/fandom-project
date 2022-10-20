@@ -187,7 +187,7 @@ export default function CreateCommunity() {
             <AlertDialogOverlay>
               <AlertDialogContent bgColor='gray.900'>
                 <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                  Delete Customer
+                  Delete Community
                 </AlertDialogHeader>
 
                 <AlertDialogBody>

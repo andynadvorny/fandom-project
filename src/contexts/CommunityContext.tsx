@@ -107,6 +107,8 @@ export function CommunitiesProvider({ children }: CommunitiesContextProviderProp
   
         toast.success(response.data.message)
 
+        getAllCommunities()
+
         Router.push('/communities')
       } 
     } catch (e: any) {
