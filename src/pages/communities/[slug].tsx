@@ -38,7 +38,6 @@ const createCommunityFormSchema = yup.object().shape({
 
 export default function CreateCommunity() {
   const { getCommunityBySlug, editCommunity, deleteCommunity } = useContext(CommunitiesContext)
-  const { user } = useContext(UserContext)
   const [community, setCommunity] = useState<Community>()
   const { categories } = useCategories()
 
@@ -74,18 +73,8 @@ export default function CreateCommunity() {
   const cancelRef = useRef() as RefObject<HTMLButtonElement>
 
   async function handleUpdateCommunity(data: any) {
-    if (community && user) {
-      const updatedCommunity = {
-        ...community,
-        name: data.name,
-        id: community.communityId,
-        categoryId: data.category,
-        coverImage: data.coverimage,
-        description: data.description,
-        userId: user.id
-      }
-  
-      await editCommunity(updatedCommunity)
+    if (community) {
+      await editCommunity(data.name, community.slug, data.category, data.coverimage, data.description, community.communityId)
     }
   }
 

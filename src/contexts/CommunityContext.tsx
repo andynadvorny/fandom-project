@@ -10,7 +10,7 @@ type CommunitiesContextData = {
   userCommunities: Community[] | undefined;
   getCommunityBySlug: (slug: string) => Community | undefined;
   createCommunity: (name: string, category:string, coverimage:string, description: string, userId: string) => void;
-  editCommunity: (community: Community) => void;
+  editCommunity: (name: string, slug: string, categoryId:string, coverimage:string, description: string, communityId: number) => void;
   deleteCommunity: (communityId: number) => void;
 }
 
@@ -119,16 +119,16 @@ export function CommunitiesProvider({ children }: CommunitiesContextProviderProp
     }
   }
 
-  async function editCommunity(updatedCommunity: Community) {
-    const url = `/communities/${updatedCommunity.communityId}`
+  async function editCommunity(name: string, slug: string, categoryId:string, coverimage:string, description: string, communityId: number) {
+    const url = `/communities/${communityId}`
 
     try {
       const response = await axios.put(url, {
-        name: updatedCommunity.name,
-        slug: updatedCommunity.slug,
-        coverImage: updatedCommunity.coverImage,
-        description: updatedCommunity.description,
-        categoryId: updatedCommunity.categoryId,
+        name,
+        slug,
+        categoryId,
+        coverImage: coverimage,
+        description,
       })
   
       if (response.status === 200) {
