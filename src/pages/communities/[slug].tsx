@@ -84,8 +84,6 @@ export default function CreateCommunity() {
         description: data.description,
         userId: user.id
       }
-
-      console.log(updatedCommunity)
   
       await editCommunity(updatedCommunity)
     }
