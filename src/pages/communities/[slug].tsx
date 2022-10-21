@@ -29,12 +29,10 @@ type Community = {
   memberCount: number;
 }
 
-const validUrl = /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm
-
 const createCommunityFormSchema = yup.object().shape({
   name: yup.string().required('Name is required'),
   category: yup.string().required('You must pick a category'),
-  coverimage: yup.string().matches(validUrl, {message: 'URL is not valid', excludeEmptyString:true}),
+  coverimage: yup.string(),
   description: yup.string(),
 })
 
@@ -63,7 +61,7 @@ export default function CreateCommunity() {
 
     setValue('name', myCommunity?.name)
     setValue('category',  {label: myCommunity?.categoryName , value: String(myCommunity?.categoryId)})
-    setValue('coverImage', myCommunity?.coverImage)
+    setValue('coverimage', myCommunity?.coverImage)
     setValue('description', myCommunity?.description)
   }, [slug])
 
@@ -82,10 +80,12 @@ export default function CreateCommunity() {
         name: data.name,
         id: community.communityId,
         categoryId: data.category,
-        coverImage: data.coverImage,
+        coverImage: data.coverimage,
         description: data.description,
         userId: user.id
       }
+
+      console.log(updatedCommunity)
   
       await editCommunity(updatedCommunity)
     }
@@ -145,8 +145,8 @@ export default function CreateCommunity() {
                 />
 
                 <Input 
-                  {...register('cover_image')}
-                  name="cover_image" 
+                  {...register('coverimage')}
+                  name="coverimage" 
                   label="Cover image" 
                   error={errors.coverimage}
                   placeholder="https://yourimage.com/image.jpg"

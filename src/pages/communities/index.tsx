@@ -10,7 +10,7 @@ import { Header } from "../../components/Header"
 import { Sidebar } from "../../components/Sidebar"
 
 export default function Communities() {
-  const { allCommunities, userCommunities } = useContext(CommunitiesContext)
+  const { userCommunities } = useContext(CommunitiesContext)
 
   return (
     <Flex direction="column" h="100vh">
