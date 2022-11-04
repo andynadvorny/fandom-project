@@ -1,7 +1,9 @@
 import type { AppProps } from 'next/app'
 import { ChakraProvider } from '@chakra-ui/react'
 import { ToastContainer } from 'react-toastify'
+import { QueryClientProvider } from 'react-query'
 
+import { queryClient } from '../services/queryClient'
 import { UserProvider } from '../contexts/UserContext'
 import { CategoriesProvider } from '../hooks/useCategories'
 import { CommunitiesProvider } from '../contexts/CommunityContext'
@@ -12,30 +14,32 @@ import 'react-toastify/dist/ReactToastify.css'
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ChakraProvider theme={theme}>  
-      <UserProvider>
-        <CategoriesProvider>
-          <CommunitiesProvider>
-            <SidebarDrawerProvider>
-              <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="colored"
-              />
+    <QueryClientProvider client={queryClient}>
+      <ChakraProvider theme={theme}>  
+        <UserProvider>
+          <CategoriesProvider>
+            <CommunitiesProvider>
+              <SidebarDrawerProvider>
+                <ToastContainer
+                  position="top-right"
+                  autoClose={5000}
+                  hideProgressBar={false}
+                  newestOnTop={false}
+                  closeOnClick
+                  rtl={false}
+                  pauseOnFocusLoss
+                  draggable
+                  pauseOnHover
+                  theme="colored"
+                />
 
-              <Component {...pageProps} />
-            </SidebarDrawerProvider>
-          </CommunitiesProvider>
-        </CategoriesProvider>
-      </UserProvider>
-    </ChakraProvider>
+                <Component {...pageProps} />
+              </SidebarDrawerProvider>
+            </CommunitiesProvider>
+          </CategoriesProvider>
+        </UserProvider>
+      </ChakraProvider>
+    </QueryClientProvider>
   )
 }
 

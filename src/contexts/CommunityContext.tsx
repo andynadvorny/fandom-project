@@ -122,6 +122,8 @@ export function CommunitiesProvider({ children }: CommunitiesContextProviderProp
   async function editCommunity(name: string, slug: string, categoryId:string, coverimage:string, description: string, communityId: number) {
     const url = `/communities/${communityId}`
 
+    console.log(name)
+
     try {
       const response = await axios.put(url, {
         name,
