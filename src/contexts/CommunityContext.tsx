@@ -109,7 +109,7 @@ export function CommunitiesProvider({ children }: CommunitiesContextProviderProp
 
         getAllCommunities()
 
-        Router.push('/communities')
+        Router.push('/my-communities')
       } 
     } catch (e: any) {
         
@@ -138,7 +138,7 @@ export function CommunitiesProvider({ children }: CommunitiesContextProviderProp
 
         getAllCommunities()
 
-        Router.push('/communities')
+        Router.push('/my-communities')
       } 
     } catch (e: any) {
         
@@ -159,7 +159,7 @@ export function CommunitiesProvider({ children }: CommunitiesContextProviderProp
 
         getAllCommunities()
 
-        Router.push('/communities')
+        Router.push('/my-communities')
       } 
     } catch (e: any) {
         

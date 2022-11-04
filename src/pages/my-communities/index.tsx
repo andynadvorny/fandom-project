@@ -29,7 +29,7 @@ export default function MyCommunities() {
           <Flex align="center" justify="space-between">
             <Heading size="lg" fontWeight="normal">My Communities</Heading>
 
-            <NextLink href="/communities/create" passHref>
+            <NextLink href="/my-communities/create" passHref>
               <Button
                 as="a" 
                 size="sm" 
@@ -66,7 +66,7 @@ export default function MyCommunities() {
                     size="lg" 
                   />
                   
-                  <NextLink href={`/community/${community.slug}`} key={community.communityId} passHref>
+                  <NextLink href={`/communities/${community.slug}`} key={community.communityId} passHref>
                     <Box as='a' ml='3'>
                       <Flex align="center" gap={2}>
                         <Text fontWeight='bold' fontSize="xl">
@@ -80,7 +80,7 @@ export default function MyCommunities() {
                     </Box>
                   </NextLink>
 
-                  <NextLink href={`/communities/${community.slug}`} passHref>
+                  <NextLink href={`/my-communities/${community.slug}`} passHref>
                     <Button
                       as="a" 
                       colorScheme="orange"
@@ -105,7 +105,7 @@ export default function MyCommunities() {
                 <Text>
                   Looks like you don&apos;t have any fandom communities yet
                 </Text>
-                <NextLink href="/communities/create" passHref>
+                <NextLink href="/my-communities/create" passHref>
                   <Button
                     as="a" 
                     fontSize="sm" 

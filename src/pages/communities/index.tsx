@@ -1,7 +1,8 @@
-import { Flex } from '@chakra-ui/react'
+import { Flex, SimpleGrid } from '@chakra-ui/react'
 import axios from '../../api/axios'
 
 import { Header } from '../../components/Header'
+import { CommunityCard } from '../../components/CommunityCard'
 
 type Community ={
   name: string;
@@ -23,19 +24,28 @@ export default function Communities({communities} : CommunityProps) {
   return (
     <Flex direction="column" h="100vh">
       <Header />
-      <Flex 
+      <SimpleGrid 
         as="main"
         w="100%"
         maxWidth={1480}
         h="full"
+        mt="10"
         px="6"
         mx="auto"
-        align="center"
+        minChildWidth='300px'
+        spacing={10}
       >
         {communities.map((community) => (
-          community.name
+          <CommunityCard
+            name={community.name}
+            categoryName={community.categoryName}
+            coverImage={community.coverImage}
+            description={community.description}
+            slug={community.slug}
+            key={community.name}
+          />
         ))}
-      </Flex>
+      </SimpleGrid>
     </Flex>
   )
 }

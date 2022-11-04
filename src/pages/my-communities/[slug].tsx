@@ -149,7 +149,7 @@ export default function CommunityDetails() {
 
               <Flex mt="8" justify="flex-end">
                 <HStack spacing="4">
-                  <NextLink href="/communities">
+                  <NextLink href="/my-communities">
                     <Button colorScheme="whiteAlpha">Cancel</Button>
                   </NextLink>
                   <Button 
