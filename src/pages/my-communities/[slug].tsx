@@ -29,14 +29,14 @@ type Community = {
   memberCount: number;
 }
 
-const createCommunityFormSchema = yup.object().shape({
+const updateCommunityFormSchema = yup.object().shape({
   name: yup.string().required('Name is required'),
   category: yup.string().required('You must pick a category'),
   coverimage: yup.string(),
   description: yup.string(),
 })
 
-export default function CreateCommunity() {
+export default function CommunityDetails() {
   const { getCommunityBySlug, editCommunity, deleteCommunity } = useContext(CommunitiesContext)
   const [community, setCommunity] = useState<Community>()
   const { categories } = useCategories()
@@ -65,7 +65,7 @@ export default function CreateCommunity() {
   }, [slug])
 
   const { register, handleSubmit, setValue, formState } = useForm({
-    resolver: yupResolver(createCommunityFormSchema)
+    resolver: yupResolver(updateCommunityFormSchema)
   })
   const errors = formState.errors
 

@@ -9,7 +9,7 @@ import { CommunitiesContext } from '../../contexts/CommunityContext'
 import { Header } from "../../components/Header"
 import { Sidebar } from "../../components/Sidebar"
 
-export default function Communities() {
+export default function MyCommunities() {
   const { userCommunities } = useContext(CommunitiesContext)
 
   return (
