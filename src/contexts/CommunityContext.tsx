@@ -8,7 +8,6 @@ import { UserContext } from './UserContext'
 type CommunitiesContextData = {
   allCommunities: Community[] | undefined;
   userCommunities: Community[] | undefined;
-  getCommunityBySlug: (slug: string) => Community | undefined;
   createCommunity: (name: string, category:string, coverimage:string, description: string, userId: string) => void;
   editCommunity: (name: string, slug: string, categoryId:string, coverimage:string, description: string, communityId: number) => void;
   deleteCommunity: (communityId: number) => void;
@@ -83,12 +82,6 @@ export function CommunitiesProvider({ children }: CommunitiesContextProviderProp
         toast.error(errorMessage)
       }
     }
-  }
-
-  function getCommunityBySlug(slug: string) {
-    const community = allCommunities.find(community => community.slug === slug)
-
-    return community
   }
 
   async function createCommunity(name: string, category:string, coverimage:string, description: string, userId: string) {
@@ -173,7 +166,6 @@ export function CommunitiesProvider({ children }: CommunitiesContextProviderProp
     <CommunitiesContext.Provider value={{
       allCommunities,
       userCommunities,
-      getCommunityBySlug,
       createCommunity,
       editCommunity,
       deleteCommunity

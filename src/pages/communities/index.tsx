@@ -1,16 +1,16 @@
-import { Flex, SimpleGrid, Spinner, Text } from '@chakra-ui/react'
+import { Flex, Heading, SimpleGrid, Spinner, Text } from '@chakra-ui/react'
 
 import { useCommunities } from '../../hooks/useCommunities'
 import { Header } from '../../components/Header'
 import { CommunityCard } from '../../components/CommunityCard'
 
 export default function Communities() {
-  const { data, isLoading, error } = useCommunities()
+  const { data, isLoading, isFetching, error } = useCommunities()
 
   return (
     <Flex direction="column" h="100vh">
       <Header />
-      <SimpleGrid 
+      <Flex 
         as="main"
         w="100%"
         maxWidth={1480}
@@ -18,19 +18,26 @@ export default function Communities() {
         mt="10"
         px="6"
         mx="auto"
-        minChildWidth='300px'
-        spacing={10}
+        direction="column"
       >
+        <Heading size="lg" fontWeight="normal" mb="4 ">
+          All Fandoms ({data?.communities.length})
+          {!isLoading && isFetching && <Spinner size="sm" color="grey-500" ml="4" />}
+        </Heading>
+
         { isLoading ? (
-            <Flex justify="center">
+            <Flex justify="center" h="full" align="center">
               <Spinner />
             </Flex>
         ) : error ? (
-          <Flex justify="center">
+          <Flex justify="center" h="full" align="center">
             <Text>Failed to fetch communities data.</Text>
           </Flex>
         ) : (
-          <>
+          <SimpleGrid 
+            minChildWidth='300px'
+            spacing={10}
+          >
             {data?.communities.map((community) => (
               <CommunityCard
                 name={community.name}
@@ -41,9 +48,9 @@ export default function Communities() {
                 key={community.name}
               />
             ))}
-          </>
+          </SimpleGrid>
         )}
-      </SimpleGrid>
+      </Flex>
     </Flex>
   )
 }
