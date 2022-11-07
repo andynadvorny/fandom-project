@@ -5,6 +5,7 @@ type Community = {
   categoryName: string;
   communityId: number;
   coverImage: string;
+  bannerImage: string;
   description: string; 
   memberCount: number;
   name: string;

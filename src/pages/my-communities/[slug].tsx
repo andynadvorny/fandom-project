@@ -17,14 +17,15 @@ import { Sidebar } from "../../components/Sidebar"
 import { Input } from '../../components/Form/Input'
 import { Select } from '../../components/Form/Select'
 import { Textarea } from '../../components/Form/Textarea'
+import { useCommunityBySlug } from '../../hooks/useCommunityBySlug'
 
 type Community = {
   name: string;
   communityId: number;
   slug: string;
   categoryName: string;
-  categoryId: number;
   coverImage: string;
+  bannerImage: string;
   description: string; 
   memberCount: number;
 }
@@ -33,11 +34,12 @@ const updateCommunityFormSchema = yup.object().shape({
   name: yup.string().required('Name is required'),
   category: yup.string().required('You must pick a category'),
   coverimage: yup.string(),
+  bannerimage: yup.string(),
   description: yup.string(),
 })
 
 export default function CommunityDetails() {
-  const { getCommunityBySlug, editCommunity, deleteCommunity } = useContext(CommunitiesContext)
+  const { editCommunity, deleteCommunity } = useContext(CommunitiesContext)
   const [community, setCommunity] = useState<Community>()
   const { categories } = useCategories()
 
@@ -47,22 +49,24 @@ export default function CommunityDetails() {
   }))
 
   const router = useRouter()
-  const { slug } = router.query
+  const slug = typeof router.query?.slug === "string" ? router.query.slug : ""
+
+  const { data, isSuccess } = useCommunityBySlug(slug)
 
   useEffect(() => {
-    if (!slug) {
+    if (!isSuccess) {
       return
     }
 
-    const myCommunity = getCommunityBySlug(String(slug))
+    const myCommunity = data.community
   
     setCommunity(myCommunity)
 
     setValue('name', myCommunity?.name)
-    setValue('category',  {label: myCommunity?.categoryName , value: String(myCommunity?.categoryId)})
     setValue('coverimage', myCommunity?.coverImage)
+    setValue('bannerimage', myCommunity?.bannerImage)
     setValue('description', myCommunity?.description)
-  }, [slug])
+  }, [data])
 
   const { register, handleSubmit, setValue, formState } = useForm({
     resolver: yupResolver(updateCommunityFormSchema)
@@ -74,7 +78,7 @@ export default function CommunityDetails() {
 
   async function handleUpdateCommunity(data: any) {
     if (community) {
-      await editCommunity(data.name, community.slug, data.category, data.coverimage, data.description, community.communityId)
+      await editCommunity(data.name, community.slug, data.category, data.coverimage, data.bannerimage, data.description, community.communityId)
     }
   }
 
@@ -138,6 +142,14 @@ export default function CommunityDetails() {
                   error={errors.coverimage}
                   placeholder="https://yourimage.com/image.jpg"
                 />
+
+                <Input 
+                  {...register('bannerimage')}
+                  name="bannerimage" 
+                  label="Banner image" 
+                  error={errors.bannerimage}
+                  placeholder="https://yourimage.com/image.jpg"
+                />    
 
                 <Textarea
                   {...register('description')}

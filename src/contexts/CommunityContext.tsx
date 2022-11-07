@@ -8,8 +8,8 @@ import { UserContext } from './UserContext'
 type CommunitiesContextData = {
   allCommunities: Community[] | undefined;
   userCommunities: Community[] | undefined;
-  createCommunity: (name: string, category:string, coverimage:string, description: string, userId: string) => void;
-  editCommunity: (name: string, slug: string, categoryId:string, coverimage:string, description: string, communityId: number) => void;
+  createCommunity: (name: string, category:string, coverimage:string, bannerimage: string, description: string, userId: string) => void;
+  editCommunity: (name: string, slug: string, categoryId:string, coverimage:string, bannerimage: string, description: string, communityId: number) => void;
   deleteCommunity: (communityId: number) => void;
 }
 
@@ -20,6 +20,7 @@ type Community = {
   categoryName: string;
   categoryId: number;
   coverImage: string;
+  bannerImage: string;
   description: string; 
   memberCount: number;
   userId: string;
@@ -84,13 +85,14 @@ export function CommunitiesProvider({ children }: CommunitiesContextProviderProp
     }
   }
 
-  async function createCommunity(name: string, category:string, coverimage:string, description: string, userId: string) {
+  async function createCommunity(name: string, category:string, coverimage:string, bannerimage: string, description: string, userId: string) {
     const url = '/communities'
 
     try {
       const response = await axios.post(url, {
         name,
         coverImage: coverimage,
+        bannerImage: bannerimage,
         categoryId: Number(category),
         description,
         userId
@@ -112,7 +114,7 @@ export function CommunitiesProvider({ children }: CommunitiesContextProviderProp
     }
   }
 
-  async function editCommunity(name: string, slug: string, categoryId:string, coverimage:string, description: string, communityId: number) {
+  async function editCommunity(name: string, slug: string, categoryId:string, coverimage:string, bannerimage: string, description: string, communityId: number) {
     const url = `/communities/${communityId}`
 
     console.log(name)
@@ -123,6 +125,7 @@ export function CommunitiesProvider({ children }: CommunitiesContextProviderProp
         slug,
         categoryId,
         coverImage: coverimage,
+        bannerImage: bannerimage,
         description,
       })
   

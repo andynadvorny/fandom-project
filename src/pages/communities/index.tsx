@@ -5,7 +5,7 @@ import { Header } from '../../components/Header'
 import { CommunityCard } from '../../components/CommunityCard'
 
 export default function Communities() {
-  const { data, isLoading, isFetching, error } = useCommunities()
+  const { data, isLoading, isSuccess, isFetching, error } = useCommunities()
 
   return (
     <Flex direction="column" h="100vh">
@@ -21,7 +21,7 @@ export default function Communities() {
         direction="column"
       >
         <Heading size="lg" fontWeight="normal" mb="4 ">
-          All Fandoms ({data?.communities.length})
+          All Fandoms {isSuccess && `(${data?.communities.length})`}
           {!isLoading && isFetching && <Spinner size="sm" color="grey-500" ml="4" />}
         </Heading>
 
@@ -43,9 +43,11 @@ export default function Communities() {
                 name={community.name}
                 categoryName={community.categoryName}
                 coverImage={community.coverImage}
+                bannerImage={community.bannerImage}
                 description={community.description}
                 slug={community.slug}
-                key={community.name}
+                memberCount={community.memberCount}
+                key={community.communityId}
               />
             ))}
           </SimpleGrid>

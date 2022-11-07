@@ -20,6 +20,7 @@ const createCommunityFormSchema = yup.object().shape({
   name: yup.string().required('Name is required'),
   category: yup.string().required('You must pick a category'),
   coverimage: yup.string(),
+  bannerimage: yup.string(),
   description: yup.string(),
 })
 
@@ -33,7 +34,7 @@ export default function CreateCommunity() {
 
   async function handleCreateCommunity(data: any) {
     if (user) {
-      await createCommunity(data.name, data.category, data.coverimage, data.description, user.id)
+      await createCommunity(data.name, data.category, data.coverimage, data.bannerimage, data.description, user.id)
     }
   }
 
@@ -97,6 +98,14 @@ export default function CreateCommunity() {
                 error={errors.coverimage}
                 placeholder="https://yourimage.com/image.jpg"
                 onChange={(e) => {setPreviewCoverImage(e.target.value)}}
+              />
+
+              <Input 
+                {...register('bannerimage')}
+                name="bannerimage" 
+                label="Banner image" 
+                error={errors.bannerimage}
+                placeholder="https://yourimage.com/image.jpg"
               />
 
               <Textarea

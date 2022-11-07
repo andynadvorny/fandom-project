@@ -3,6 +3,7 @@ import { Flex, Image, Button, Heading, Spinner, Text, Divider } from "@chakra-ui
 
 import { useCommunityBySlug } from "../../hooks/useCommunityBySlug"
 import { Header } from "../../components/Header"
+import { RiCheckboxMultipleBlankFill, RiGroupLine } from "react-icons/ri"
 
 export default function Community() {
   const router = useRouter()
@@ -34,9 +35,11 @@ export default function Community() {
         ) : isSuccess && (
           <Flex direction="column">
             <Image
-              src="https://cdn.pixabay.com/photo/2017/04/11/15/55/animals-2222007__480.jpg"
+              src={data.community.bannerImage}
               alt={data.community.name}
               borderRadius="4"
+              maxHeight="400px"
+              objectFit="cover"
             />
 
             <Flex mt="-75px" align="center">
@@ -51,7 +54,7 @@ export default function Community() {
                 borderRadius="50%"
               />
 
-              <Button ml="auto" mt="75px" colorScheme="orange">
+              <Button ml="auto" mt="75px" variant="outline">
                 Follow
               </Button>
             </Flex>
@@ -68,6 +71,18 @@ export default function Community() {
             <Text mt="4">
               {data.community.description}
             </Text>
+
+            <Flex mt="4" gap="6">
+              <Flex align="center">
+                <RiGroupLine />
+                <Text ml="1">{data.community.memberCount}</Text>
+              </Flex>
+
+              <Flex align="center">
+                <RiCheckboxMultipleBlankFill />
+                <Text ml="1">33</Text>
+              </Flex>
+            </Flex>
 
             <Divider my="6" borderColor="gray.700" />
 
