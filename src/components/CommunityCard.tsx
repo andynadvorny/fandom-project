@@ -33,9 +33,12 @@ export function CommunityCard({ name, categoryName, coverImage, bannerImage, des
       >
         <Image
           src={bannerImage}
-          maxW="100%"
           borderRadius="xl"
           alt={name}
+          objectFit="cover"
+          h="175px"
+          w="full"
+          fallbackSrc='https://img.freepik.com/free-photo/yellow-watercolor-paper_95678-446.jpg?w=1380&t=st=1668261837~exp=1668262437~hmac=214ee1a747a0c025424c3bda7fe63e6109322fa1960f40c0c0a7f2aadcf93c78'
         />
         
         <Avatar 
@@ -47,7 +50,7 @@ export function CommunityCard({ name, categoryName, coverImage, bannerImage, des
           border="3px solid #181B23"
         />
 
-        <Flex direction="column">
+        <Flex direction="column" w="full">
           <Text 
             fontWeight='bold' 
             fontSize="xl" 
