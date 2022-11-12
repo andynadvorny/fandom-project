@@ -78,13 +78,23 @@ export default function CommunityDetails() {
 
   async function handleUpdateCommunity(data: any) {
     if (community) {
-      await editCommunity(data.name, community.slug, data.category, data.coverimage, data.bannerimage, data.description, community.communityId)
+      const newCommunityData = {
+        name: data.name, 
+        slug: community.slug, 
+        categoryId: data.category, 
+        coverImage: data.coverimage, 
+        bannerImage: data.bannerimage, 
+        description: data.description, 
+        communityId: community.communityId
+      }
+
+      await editCommunity.mutateAsync(newCommunityData)
     }
   }
 
   async function handleDeleteCommunity() {
     if (community) {
-      await deleteCommunity(community?.communityId)
+      await deleteCommunity.mutateAsync(community?.communityId)
     }
   }
 

@@ -1,29 +1,26 @@
-import { ReactNode, createContext, useState, useEffect, useContext } from "react"
+import { ReactNode, createContext } from "react"
 import Router from 'next/router'
 import { toast } from 'react-toastify'
 
 import axios from '../api/axios'
-import { UserContext } from './UserContext'
+import { useMutation, UseMutationResult } from "react-query"
+import { queryClient } from "../services/queryClient"
 
 type CommunitiesContextData = {
-  allCommunities: Community[] | undefined;
-  userCommunities: Community[] | undefined;
-  createCommunity: (name: string, category:string, coverimage:string, bannerimage: string, description: string, userId: string) => void;
-  editCommunity: (name: string, slug: string, categoryId:string, coverimage:string, bannerimage: string, description: string, communityId: number) => void;
-  deleteCommunity: (communityId: number) => void;
+  createCommunity: UseMutationResult<void, unknown, CommunityData, unknown>;
+  editCommunity: UseMutationResult<void, unknown, CommunityData, unknown>;
+  deleteCommunity: UseMutationResult<void, unknown, number, unknown>;
 }
 
-type Community = {
+type CommunityData = {
   name: string;
-  communityId: number;
-  slug: string;
-  categoryName: string;
+  communityId?: number;
+  slug?: string;
   categoryId: number;
   coverImage: string;
   bannerImage: string;
   description: string; 
-  memberCount: number;
-  userId: string;
+  userId?: number;
 }
 
 type CommunitiesContextProviderProps = {
@@ -33,77 +30,16 @@ type CommunitiesContextProviderProps = {
 export const CommunitiesContext = createContext({} as CommunitiesContextData)
 
 export function CommunitiesProvider({ children }: CommunitiesContextProviderProps) {
-  const { user } = useContext(UserContext)
-  const [allCommunities, setAllCommunities] = useState<Community[]>([])
-  const [userCommunities, setUserCommunities] = useState<Community[]>([])
-
-  useEffect(() => {
-    getAllCommunities()
-  }, []);
-
-  useEffect(() => {
-    getCommunitiesByUser()
-  }, [user]);
-
-  async function getAllCommunities() {
-    try {
-      const response = await axios.get('/communities')
-
-      if (response.status === 200) {
-  
-        const communitiyList = response.data.body
-  
-        setAllCommunities(communitiyList)
-
-        if (user) {
-          getCommunitiesByUser()
-        }
-      }
-    } catch (e: any) {
-      const errorMessage = e.response.data == undefined ? e.message : e.response.data.message       
-
-      toast.error(errorMessage)
-    }
-  }
-
-  async function getCommunitiesByUser() {
-    if (user) {
-      try {
-        const response = await axios.get(`/users/${user.id}/communities`)
-  
-        if (response.status === 200) {
-    
-          const communitiyList = response.data.body
-    
-          setUserCommunities(communitiyList)
-        }
-      } catch (e: any) {
-        const errorMessage = e.response.data == undefined ? e.message : e.response.data.message       
-  
-        toast.error(errorMessage)
-      }
-    }
-  }
-
-  async function createCommunity(name: string, category:string, coverimage:string, bannerimage: string, description: string, userId: string) {
+  const createCommunity = useMutation(async (community: CommunityData) => {
     const url = '/communities'
 
     try {
-      const response = await axios.post(url, {
-        name,
-        coverImage: coverimage,
-        bannerImage: bannerimage,
-        categoryId: Number(category),
-        description,
-        userId
-      })
+      const response = await axios.post(url, community)
   
       if (response.status === 201) {
   
         toast.success(response.data.message)
 
-        getAllCommunities()
-
         Router.push('/my-communities')
       } 
     } catch (e: any) {
@@ -112,28 +48,24 @@ export function CommunitiesProvider({ children }: CommunitiesContextProviderProp
 
       toast.error(errorMessage)
     }
-  }
+  }, {
+    onSuccess : () => {
+      queryClient.invalidateQueries('communities by user'),
+      queryClient.invalidateQueries('communities')
+    }
+  })
 
-  async function editCommunity(name: string, slug: string, categoryId:string, coverimage:string, bannerimage: string, description: string, communityId: number) {
-    const url = `/communities/${communityId}`
+  const editCommunity = useMutation(async (community: CommunityData) => {
+    const url = `/communities/${community.communityId}`
 
-    console.log(name)
+    console.log(community)
 
     try {
-      const response = await axios.put(url, {
-        name,
-        slug,
-        categoryId,
-        coverImage: coverimage,
-        bannerImage: bannerimage,
-        description,
-      })
+      const response = await axios.put(url, community)
   
       if (response.status === 200) {
         toast.success("Your community was updated")
 
-        getAllCommunities()
-
         Router.push('/my-communities')
       } 
     } catch (e: any) {
@@ -142,9 +74,14 @@ export function CommunitiesProvider({ children }: CommunitiesContextProviderProp
 
       toast.error(errorMessage)
     }
-  }
+  }, {
+    onSuccess : () => {
+      queryClient.invalidateQueries('communities by user'),
+      queryClient.invalidateQueries('communities')
+    }
+  })
 
-  async function deleteCommunity(communityId: number) {
+  const deleteCommunity = useMutation(async (communityId: number) => {
     const url = `/communities/${communityId}`
 
     try {
@@ -153,8 +90,6 @@ export function CommunitiesProvider({ children }: CommunitiesContextProviderProp
       if (response.status === 200) {
         toast.success("Your community was deleted.")
 
-        getAllCommunities()
-
         Router.push('/my-communities')
       } 
     } catch (e: any) {
@@ -163,12 +98,15 @@ export function CommunitiesProvider({ children }: CommunitiesContextProviderProp
 
       toast.error(errorMessage)
     }
-  }
+  }, {
+    onSuccess : () => {
+      queryClient.invalidateQueries('communities by user'),
+      queryClient.invalidateQueries('communities')
+    }
+  })
 
   return (
     <CommunitiesContext.Provider value={{
-      allCommunities,
-      userCommunities,
       createCommunity,
       editCommunity,
       deleteCommunity

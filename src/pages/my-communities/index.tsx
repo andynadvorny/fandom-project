@@ -1,16 +1,15 @@
-import { useContext } from 'react'
 import NextLink from 'next/link'
-import { Flex, Box, Heading, Divider, Button, Icon, Text, Avatar, Badge } from "@chakra-ui/react"
+import { Flex, Box, Heading, Divider, Button, Icon, Text, Avatar, Badge, Spinner } from "@chakra-ui/react"
 import { motion } from 'framer-motion'
 import { RiAddLine, RiBubbleChartLine, RiPencilLine } from "react-icons/ri"
 
-//import { withSSRAuth } from "../../utils/withSSRAuth"
-import { CommunitiesContext } from '../../contexts/CommunityContext'
+import { withSSRAuth } from "../../utils/withSSRAuth"
+import { useCommunitiesByUser } from '../../hooks/useCommunitiesByUser'
 import { Header } from "../../components/Header"
 import { Sidebar } from "../../components/Sidebar"
 
 export default function MyCommunities() {
-  const { userCommunities } = useContext(CommunitiesContext)
+  const { data, isLoading, isSuccess, error } = useCommunitiesByUser()
 
   return (
     <Flex direction="column" h="100vh">
@@ -45,8 +44,16 @@ export default function MyCommunities() {
           <Divider my="6" borderColor="gray.700" />
           
           <Flex direction="column" gap={2}>
-            { userCommunities && userCommunities.length > 0 ? (
-              userCommunities.map(community => (
+            {isLoading ? (
+              <Flex justify="center" h="full" align="center">
+                <Spinner />
+              </Flex>
+            ) : error ? (
+              <Flex justify="center" h="full" align="center">
+                <Text>Failed to fetch communities data.</Text>
+              </Flex>
+            ) : isSuccess && data.communities.length > 0 ? (
+              data.communities.map(community => (
                 <Flex 
                   as={motion.div}
                   key={community.communityId}
@@ -124,8 +131,8 @@ export default function MyCommunities() {
   )
 }
 
-// export const getServerSideProps = withSSRAuth(async (ctx) => {
-//   return {
-//     props: {}
-//   }
-// })
+export const getServerSideProps = withSSRAuth(async (ctx) => {
+  return {
+    props: {}
+  }
+})

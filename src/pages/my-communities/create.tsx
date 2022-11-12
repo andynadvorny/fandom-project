@@ -34,7 +34,14 @@ export default function CreateCommunity() {
 
   async function handleCreateCommunity(data: any) {
     if (user) {
-      await createCommunity(data.name, data.category, data.coverimage, data.bannerimage, data.description, user.id)
+      await createCommunity.mutateAsync({
+        name: data.name, 
+        categoryId: data.category, 
+        coverImage: data.coverimage, 
+        bannerImage: data.bannerimage, 
+        description: data.description, 
+        userId: user.id
+      })
     }
   }
 

@@ -15,7 +15,7 @@ type UserContextData = {
 
 type User = {
   name: string;
-  id: string;
+  id: number;
   email: string;
   bio: string;
   avatar: string;

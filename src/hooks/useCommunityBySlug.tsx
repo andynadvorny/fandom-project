@@ -21,8 +21,6 @@ export async function getCommunityBySlug(slug: string): Promise<GetCommunityResp
   
   const community = data.body
 
-  console.log(community)
-
   return { 
     community 
   }
