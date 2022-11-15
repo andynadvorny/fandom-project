@@ -10,6 +10,7 @@ type CommunitiesContextData = {
   createCommunity: UseMutationResult<void, unknown, CommunityData, unknown>;
   editCommunity: UseMutationResult<void, unknown, CommunityData, unknown>;
   deleteCommunity: UseMutationResult<void, unknown, number, unknown>;
+  createPost: UseMutationResult<void, unknown, CreatePostVariables, unknown>;
 }
 
 type CommunityData = {
@@ -25,6 +26,19 @@ type CommunityData = {
 
 type CommunitiesContextProviderProps = {
   children: ReactNode;
+}
+
+type PostData = {
+  title: string;
+  type: string;
+  author: number;
+  text: string;
+}
+
+type CreatePostVariables = {
+  post: PostData;
+  communityId: number; 
+  communitySlug: string;
 }
 
 export const CommunitiesContext = createContext({} as CommunitiesContextData)
@@ -105,11 +119,36 @@ export function CommunitiesProvider({ children }: CommunitiesContextProviderProp
     }
   })
 
+  const createPost = useMutation(async ({ post, communityId, communitySlug }: CreatePostVariables) => {
+    const url = `/communities/${communityId}/posts`
+
+    try {
+      const response = await axios.post(url, post)
+  
+      if (response.status === 201) {
+  
+        toast.success(response.data.message)
+
+        Router.push(`/communities/${communitySlug}`)
+      } 
+    } catch (e: any) {
+        
+      const errorMessage = e.response.data.message       
+
+      toast.error(errorMessage)
+    }
+  }, {
+    onSuccess : () => {
+      queryClient.invalidateQueries('community posts')
+    }
+  })
+
   return (
     <CommunitiesContext.Provider value={{
       createCommunity,
       editCommunity,
-      deleteCommunity
+      deleteCommunity,
+      createPost
     }}>
       {children}
     </CommunitiesContext.Provider>

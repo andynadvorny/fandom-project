@@ -5,7 +5,7 @@ interface SelectProps extends ChakraSelectProps {
   name: string,
   label?: string,
   options: {
-    value: number,
+    value: number | string,
     label: string,
   }[],
   error: any
@@ -24,7 +24,7 @@ const SelectBase: ForwardRefRenderFunction<HTMLSelectElement, SelectProps>
           bgColor="gray.900"
           variant="filled"
           _hover={{
-            bgCoolor: "gray.900"
+            bgColor: "gray.900"
           }}
           ref={ref}
           {...rest}

@@ -1,23 +1,23 @@
 import { useContext, useEffect, useState, useRef, RefObject } from 'react'
 import { useRouter } from "next/router"
 import NextLink from 'next/link'
-import { Flex, Box, Heading, Divider, Button, VStack, HStack, Spinner, AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter, useDisclosure } from "@chakra-ui/react"
+import { Flex, Box, Heading, Divider, Button, VStack, HStack, Spinner, useDisclosure, Text } from "@chakra-ui/react"
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup'
 import { RiDeleteBinFill } from "react-icons/ri"
 
-//import { withSSRAuth } from "../../utils/withSSRAuth"
-import { CommunitiesContext } from '../../contexts/CommunityContext'
-import { UserContext } from '../../contexts/UserContext'
-import { useCategories } from '../../hooks/useCategories'
+import { withSSRAuth } from "../../../utils/withSSRAuth"
+import { CommunitiesContext } from '../../../contexts/CommunityContext'
+import { useCategories } from '../../../hooks/useCategories'
+import { useCommunityBySlug } from '../../../hooks/useCommunityBySlug'
 
-import { Header } from "../../components/Header"
-import { Sidebar } from "../../components/Sidebar"
-import { Input } from '../../components/Form/Input'
-import { Select } from '../../components/Form/Select'
-import { Textarea } from '../../components/Form/Textarea'
-import { useCommunityBySlug } from '../../hooks/useCommunityBySlug'
+import { Header } from "../../../components/Header"
+import { Sidebar } from "../../../components/Sidebar"
+import { Input } from '../../../components/Form/Input'
+import { Select } from '../../../components/Form/Select'
+import { Textarea } from '../../../components/Form/Textarea'
+import { ConfirmDelete } from '../../../components/Modals/ConfirmDelete'
 
 type Community = {
   name: string;
@@ -51,7 +51,7 @@ export default function CommunityDetails() {
   const router = useRouter()
   const slug = typeof router.query?.slug === "string" ? router.query.slug : ""
 
-  const { data, isSuccess } = useCommunityBySlug(slug)
+  const { data, isSuccess, isLoading, isFetching, error } = useCommunityBySlug(slug)
 
   useEffect(() => {
     if (!isSuccess) {
@@ -73,8 +73,8 @@ export default function CommunityDetails() {
   })
   const errors = formState.errors
 
-  const { isOpen, onClose, onOpen } = useDisclosure()
-  const cancelRef = useRef() as RefObject<HTMLButtonElement>
+  const { isOpen : isDeleteOpen, onClose: onDeleteClose, onOpen : onDeleteOpen } = useDisclosure()
+  const cancelDeleteRef = useRef() as RefObject<HTMLButtonElement>
 
   async function handleUpdateCommunity(data: any) {
     if (community) {
@@ -113,9 +113,12 @@ export default function CommunityDetails() {
           maxW={800}
         >
           <Flex>
-            <Heading size="lg" fontWeight="normal">{community?.name}</Heading>
+            <Heading size="lg" fontWeight="normal">
+              {community?.name}
+              {isFetching && <Spinner size="sm" color="grey-500" ml="4" />}
+            </Heading>
             <Button 
-              onClick={onOpen}
+              onClick={onDeleteOpen}
               colorScheme="red"
               ml="auto"
               px={0}
@@ -127,7 +130,11 @@ export default function CommunityDetails() {
 
           <Divider my="6" borderColor="gray.700" />
           
-          { community != undefined ? (
+          { isLoading ? (
+            <Spinner />
+          ) : error ? (
+            <Text>Can&apos;t load community data</Text>
+          ) : isSuccess && (
             <Box as="form" onSubmit={handleSubmit(handleUpdateCommunity)}>
               <VStack spacing="6">
                 <Input
@@ -184,45 +191,18 @@ export default function CommunityDetails() {
                 </HStack>
               </Flex>
             </Box>
-          ) : (
-            <Spinner />
           )}
 
-          <AlertDialog
-            isOpen={isOpen}
-            leastDestructiveRef={cancelRef}
-            onClose={onClose}
-          >
-            <AlertDialogOverlay>
-              <AlertDialogContent bgColor='gray.900'>
-                <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                  Delete Community
-                </AlertDialogHeader>
-
-                <AlertDialogBody>
-                  Are you sure you want to delete this community? The data will be lost forever.
-                </AlertDialogBody>
-
-                <AlertDialogFooter>
-                  <Button ref={cancelRef} onClick={onClose} colorScheme="whiteAlpha">
-                    Cancel
-                  </Button>
-                  <Button colorScheme='red' onClick={handleDeleteCommunity} ml={3}>
-                    Delete
-                  </Button>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialogOverlay>
-          </AlertDialog>
+          <ConfirmDelete isOpen={isDeleteOpen} onClose={onDeleteClose} cancelRef={cancelDeleteRef} handleDelete={handleDeleteCommunity} />
         </Box>
       </Flex>
     </Flex>
   )
 }
 
-// export const getServerSideProps = withSSRAuth(async (ctx) => {
-//   return {
-//     props: {}
-//   }
-// })
+export const getServerSideProps = withSSRAuth(async (ctx) => {
+  return {
+    props: {}
+  }
+})
 
