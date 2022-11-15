@@ -2,8 +2,10 @@ import { ReactNode, createContext, useState, useEffect } from "react"
 import Router from 'next/router';
 import { toast } from 'react-toastify'
 import { setCookie, parseCookies, destroyCookie } from 'nookies' 
+import { useMutation, UseMutationResult } from "react-query";
 
 import axios from '../api/axios'
+import { queryClient } from "../services/queryClient";
 
 type UserContextData = {
   user: User | undefined;
@@ -11,6 +13,8 @@ type UserContextData = {
   signOut: () => void;
   createUser: (name: string, email:string, password:string) => void;
   editUser: (user: UpdatedUser) => void;
+  followCommunity: UseMutationResult<void, unknown, number, unknown>;
+  unfollowCommunity: UseMutationResult<void, unknown, number, unknown>;
 }
 
 type User = {
@@ -47,17 +51,6 @@ export function UserProvider({ children }: UserContextProviderProps) {
       setUser(foundUser);
     }
   }, [])
-
-  /*
-  {
-    name: 'Andy Nadvorny',
-    id: '1',
-    email: 'andy@email.com',
-    bio: '',
-    avatar: '',
-    slug: ''
-  }
-  */
 
   async function signIn(email: string, password: string) {
     const url = '/users/authentication'
@@ -165,13 +158,70 @@ export function UserProvider({ children }: UserContextProviderProps) {
     }
   }
 
+  const followCommunity = useMutation(async (communityId: number) => {
+    const url = '/communities/follow'
+
+    try {
+      const response = await axios.post(url, {
+        userId: user?.id,
+        communityId: communityId,
+        role: "Follower"
+      })
+  
+      if (response.status === 201) {
+  
+        toast.success(response.data.message)
+
+      } 
+    } catch (e: any) {
+        
+      const errorMessage = e.response.data.message       
+
+      toast.error(errorMessage)
+    }
+  }, {
+    onSuccess : () => {
+      queryClient.invalidateQueries('communities followed')
+    }
+  })
+
+  const unfollowCommunity = useMutation(async (communityId: number) => {
+    const url = '/communities/follow'
+
+    try {
+      const response = await axios.delete(url, {
+        data: {
+          userId: user?.id,
+          communityId: communityId,
+        }
+      })
+  
+      if (response.status === 200) {
+  
+        toast.success(response.data.message)
+
+      } 
+    } catch (e: any) {
+        
+      const errorMessage = e.response.data.message       
+
+      toast.error(errorMessage)
+    }
+  }, {
+    onSuccess : () => {
+      queryClient.invalidateQueries('communities followed')
+    }
+  })
+
   return (
     <UserContext.Provider value={{
       user,
       signIn,
       signOut,
       createUser,
-      editUser
+      editUser,
+      followCommunity,
+      unfollowCommunity
     }}>
       {children}
     </UserContext.Provider>

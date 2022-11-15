@@ -1,15 +1,52 @@
+import { useContext, useState, useEffect, useRef, RefObject } from "react"
+import NextLink from 'next/link'
 import { useRouter } from "next/router"
-import { Flex, Image, Button, Heading, Spinner, Text, Divider } from "@chakra-ui/react"
+import { Flex, Image, Button, Heading, Spinner, Text, Divider, AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter, useDisclosure, CloseButton } from "@chakra-ui/react"
 
+import { UserContext } from "../../contexts/UserContext"
 import { useCommunityBySlug } from "../../hooks/useCommunityBySlug"
 import { Header } from "../../components/Header"
 import { RiCheckboxMultipleBlankFill, RiGroupLine } from "react-icons/ri"
+import { useCommunitiesFollowed } from "../../hooks/useCommunitiesFollowed"
 
 export default function Community() {
   const router = useRouter()
   const slug = typeof router.query?.slug === "string" ? router.query.slug : ""
   
   const { data, isSuccess, isLoading, isFetching, error } = useCommunityBySlug(slug)
+  const { data : followedCommunities, isSuccess : followedSuccess } = useCommunitiesFollowed()
+  const { user, followCommunity, unfollowCommunity } = useContext(UserContext)
+
+  const [isFollowing, setIsFollowing] = useState<boolean>()
+
+  const { isOpen, onClose, onOpen } = useDisclosure()
+  const cancelRef = useRef() as RefObject<HTMLButtonElement>
+
+  async function handleFollow(communityId: number) {
+    if (user) {
+      followCommunity.mutateAsync(communityId)
+
+      setIsFollowing(true)
+    } else {
+      onOpen()
+    }
+  }
+
+  async function handleUnfollow(communityId: number) {
+    unfollowCommunity.mutateAsync(communityId)
+
+    setIsFollowing(false)
+  }
+
+  useEffect(() => {
+    const follows = followedCommunities?.communities.find(community => community.communityId === data?.community.communityId)
+        
+    if (follows) {
+      setIsFollowing(true)
+    } else {
+      setIsFollowing(false)
+    }
+  }, [followedCommunities, followedSuccess, isSuccess])
   
   return (
     <Flex direction="column" h="100vh">
@@ -54,9 +91,29 @@ export default function Community() {
                 borderRadius="50%"
               />
 
-              <Button ml="auto" mt="75px" variant="outline">
-                Follow
-              </Button>
+              { (isSuccess && followedSuccess) && isFollowing ? (
+                <Button 
+                  ml="auto" 
+                  mt="75px" 
+                  variant="outline" 
+                  _hover={{ 
+                    color: '#E53E3E', 
+                    borderColor: '#E53E3E'
+                  }} 
+                  onClick={() => handleUnfollow(data.community.communityId)}
+                >
+                  Following
+                </Button>
+              ) : (
+                <Button 
+                  ml="auto" 
+                  mt="75px" 
+                  colorScheme="orange" 
+                  onClick={() => handleFollow(data.community.communityId)}
+                >
+                  Follow
+                </Button>
+              )}
             </Flex>
 
             <Heading size="lg" fontWeight="normal" mt="8">
@@ -89,6 +146,38 @@ export default function Community() {
             content goes here
           </Flex>
         )}
+        <AlertDialog
+          isOpen={isOpen}
+          leastDestructiveRef={cancelRef}
+          onClose={onClose}
+        >
+          <AlertDialogOverlay>
+            <AlertDialogContent bgColor='gray.900'>
+              <CloseButton
+                alignSelf='flex-end'
+                position='relative'
+                right={1}
+                top={1}
+                onClick={onClose}
+              />
+              <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                Login Required
+              </AlertDialogHeader>
+
+              <AlertDialogBody>
+                You must be logged in to follow a fandom community
+              </AlertDialogBody>
+
+              <AlertDialogFooter>
+                <NextLink href="/login" passHref>
+                  <Button colorScheme='orange' ml={3}>
+                    Login
+                  </Button>
+                </NextLink>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialogOverlay>
+        </AlertDialog>
       </Flex>
     </Flex>
   )
