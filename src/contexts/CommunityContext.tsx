@@ -31,7 +31,7 @@ type CommunitiesContextProviderProps = {
 type PostData = {
   title: string;
   type: string;
-  author: number;
+  userId: number;
   text: string;
 }
 

@@ -22,7 +22,7 @@ export async function getCommunitiesFollowed(): Promise<GetCommunitiesFollowedRe
 
   const user = JSON.parse(loggedUser);
   
-  const { data } = await axios.get(`/users/${user.id}/communities`)
+  const { data } = await axios.get(`/users/${user.id}/communities?returnType=follower`)
 
   const communities = data.body
 

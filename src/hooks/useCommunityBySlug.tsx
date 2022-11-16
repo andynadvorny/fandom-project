@@ -10,6 +10,7 @@ type Community = {
   memberCount: number;
   name: string;
   slug: string;
+  ownerId: number;
 }
 
 type GetCommunityResponse = {

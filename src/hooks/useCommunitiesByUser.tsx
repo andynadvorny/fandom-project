@@ -22,7 +22,7 @@ export async function getCommunitiesByUser(): Promise<GetCommunitiesByUserRespon
 
   const user = JSON.parse(loggedUser);
   
-  const { data } = await axios.get(`/users/${user.id}/communities`)
+  const { data } = await axios.get(`/users/${user.id}/communities?returnType=owner`)
 
   const communities = data.body
 

@@ -75,7 +75,7 @@ export default function CommunityPost() {
           title: formData.title,
           text: formData.content,
           type: formData.posttype,
-          author: user.id
+          userId: user.id
         },
         communityId: data.community.communityId,
         communitySlug: data.community.slug

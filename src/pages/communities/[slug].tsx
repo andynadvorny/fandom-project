@@ -18,6 +18,7 @@ export default function Community() {
   const { user, followCommunity, unfollowCommunity } = useContext(UserContext)
 
   const [isFollowing, setIsFollowing] = useState<boolean>()
+  const [isOwner, setIsOwner] = useState<boolean>(false)
 
   const { isOpen, onClose, onOpen } = useDisclosure()
   const cancelRef = useRef() as RefObject<HTMLButtonElement>
@@ -47,6 +48,14 @@ export default function Community() {
       setIsFollowing(false)
     }
   }, [followedCommunities, followedSuccess, isSuccess])
+
+  useEffect(() => {
+    if (user && isSuccess) {
+      if (user.id === data.community.ownerId) {
+        setIsOwner(true)
+      }
+    }
+  }, [user, isSuccess])
   
   return (
     <Flex direction="column" h="100vh">
@@ -91,7 +100,17 @@ export default function Community() {
                 borderRadius="50%"
               />
 
-              { (isSuccess && followedSuccess) && isFollowing ? (
+              { isSuccess && isOwner ? (
+                <NextLink href={`/my-communities/${data.community.slug}`} passHref>
+                  <Button 
+                    ml="auto" 
+                    mt="75px" 
+                    colorScheme="orange" 
+                  >
+                    Add post
+                  </Button>
+                </NextLink>
+              ) : (isSuccess && followedSuccess) && isFollowing ? (
                 <Button 
                   ml="auto" 
                   mt="75px" 
