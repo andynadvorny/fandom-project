@@ -2,7 +2,7 @@ import { useContext, useEffect, useState, useRef, RefObject } from 'react'
 import { useRouter } from "next/router"
 import Head from 'next/head'
 import NextLink from 'next/link'
-import { Flex, Box, Heading, Divider, Button, VStack, HStack, Spinner, useDisclosure, Text } from "@chakra-ui/react"
+import { Flex, Box, Heading, Divider, Button, VStack, HStack, Spinner, useDisclosure, Text, Image } from "@chakra-ui/react"
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -43,6 +43,8 @@ const updateCommunityFormSchema = yup.object().shape({
 export default function CommunityDetails() {
   const { editCommunity, deleteCommunity } = useContext(CommunitiesContext)
   const [community, setCommunity] = useState<Community>()
+  const [bannerPreview, setBannerPreview] = useState<string>()
+  const [coverPreview, setCoverPreview] = useState<string>()
   const { categories } = useCategories()
 
   const categoryOptions = categories.map(category => ({
@@ -63,6 +65,8 @@ export default function CommunityDetails() {
     const myCommunity = data.community
   
     setCommunity(myCommunity)
+    setBannerPreview(myCommunity?.bannerImage)
+    setCoverPreview(myCommunity?.coverImage)
 
     setValue('name', myCommunity?.name)
     setValue('coverimage', myCommunity?.coverImage)
@@ -145,6 +149,31 @@ export default function CommunityDetails() {
                 </Button>
               </Flex>
 
+              <Box mt={4}>
+                <Image
+                  src={bannerPreview}
+                  alt={community?.name}
+                  borderRadius="4"
+                  maxHeight="350px"
+                  objectFit="cover"
+                  w="100%"
+                  fallbackSrc='https://via.placeholder.com/800x350'
+                /> 
+
+                <Image
+                  src={coverPreview}
+                  alt={community?.name}
+                  border="5px solid white"
+                  borderColor="gray.900"
+                  ml="58px"
+                  width="150px"
+                  height="150px"
+                  borderRadius="50%"
+                  mt="-75px"
+                  fallbackSrc='https://via.placeholder.com/150'
+                />
+              </Box>
+
               <Divider my="6" borderColor="gray.700" />
               
               { isLoading ? (
@@ -167,7 +196,7 @@ export default function CommunityDetails() {
                       label="Category" 
                       options={categoryOptions}
                       error={errors.category}
-                    />
+                    />      
 
                     <Input 
                       {...register('coverimage')}
@@ -175,6 +204,7 @@ export default function CommunityDetails() {
                       label="Cover image" 
                       error={errors.coverimage}
                       placeholder="https://yourimage.com/image.jpg"
+                      onChange={(e) => setCoverPreview(e.target.value)}
                     />
 
                     <Input 
@@ -183,7 +213,8 @@ export default function CommunityDetails() {
                       label="Banner image" 
                       error={errors.bannerimage}
                       placeholder="https://yourimage.com/image.jpg"
-                    />    
+                      onChange={(e) => setBannerPreview(e.target.value)}
+                    />   
 
                     <Textarea
                       {...register('description')}
