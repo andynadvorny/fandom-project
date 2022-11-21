@@ -20,6 +20,7 @@ export function SidebarNav() {
         <Stack spacing="4" mt="8" align="stretch">
           <NavLink href="/dashboard" icon={RiDashboardLine}>Dashboard</NavLink>
           <NavLink href="/my-communities" icon={RiBubbleChartLine}>My Communities</NavLink>
+          <NavLink href="/following" icon={RiBubbleChartLine}>Following</NavLink>
           <NavLink href="/feed" icon={RiProfileLine}>News Feed</NavLink>
         </Stack>
       </Box>

@@ -1,4 +1,5 @@
 import { useContext, useEffect } from 'react';
+import Head from 'next/head';
 import NextLink from 'next/link'
 import { Box, Button, Divider, Flex, Heading, HStack, SimpleGrid, VStack } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
@@ -48,77 +49,83 @@ export default function EditProfile() {
   }
 
   return (
-    <Flex direction="column" h="100vh">
-      <Header />
+    <>
+      <Head>
+          <title>fandom project | my profile</title>
+      </Head>
 
-      <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
-        <Sidebar />
+      <Flex direction="column" h="100vh">
+        <Header />
 
-        <Box 
-          as="form" 
-          flex="1" 
-          borderRadius={8} 
-          bg="gray.800" 
-          p="6"
-          maxW={800}
-          onSubmit={handleSubmit(handleCreateUser)}
-        >
-          <Heading size="lg" fontWeight="normal">Update profile</Heading>
+        <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
+          <Sidebar />
 
-          <Divider my="6" borderColor="gray.700" />
+          <Box 
+            as="form" 
+            flex="1" 
+            borderRadius={8} 
+            bg="gray.800" 
+            p="6"
+            maxW={800}
+            onSubmit={handleSubmit(handleCreateUser)}
+          >
+            <Heading size="lg" fontWeight="normal">Update profile</Heading>
 
-          <VStack spacing="6">
-            <SimpleGrid minChildWidth="240px" spacing="6" w="100%">
-              <Input
-                {...register('name')}
-                name="name"
-                label="Full name" 
-                error={errors.name}
-              />
-              <Input 
-                {...register('email')}
-                name="email" 
-                type="email" 
-                label="Email" 
-                error={errors.email}
-              />
-            </SimpleGrid>
+            <Divider my="6" borderColor="gray.700" />
 
-            <SimpleGrid minChildWidth="240px" spacing="6" w="100%">
-              <Input 
-                {...register('bio')}
-                name="bio" 
-                type="text" 
-                label="Bio" 
-                error={errors.bio}
-              />
-              <Input 
-                {...register('avatar')}
-                name="avatar" 
-                type="text" 
-                label="Avatar URL" 
-                error={errors.avatar}
-              />
-            </SimpleGrid>
-          </VStack>
+            <VStack spacing="6">
+              <SimpleGrid minChildWidth="240px" spacing="6" w="100%">
+                <Input
+                  {...register('name')}
+                  name="name"
+                  label="Full name" 
+                  error={errors.name}
+                />
+                <Input 
+                  {...register('email')}
+                  name="email" 
+                  type="email" 
+                  label="Email" 
+                  error={errors.email}
+                />
+              </SimpleGrid>
 
-          <Flex mt="8" justify="flex-end">
-            <HStack spacing="4">
-              <NextLink href="/">
-                <Button colorScheme="whiteAlpha">Cancel</Button>
-              </NextLink>
-              <Button 
-                type="submit" 
-                colorScheme="orange"
-                isLoading={formState.isSubmitting}
-              >
-                Update profile
-              </Button>
-            </HStack>
-          </Flex>
-        </Box>
+              <SimpleGrid minChildWidth="240px" spacing="6" w="100%">
+                <Input 
+                  {...register('bio')}
+                  name="bio" 
+                  type="text" 
+                  label="Bio" 
+                  error={errors.bio}
+                />
+                <Input 
+                  {...register('avatar')}
+                  name="avatar" 
+                  type="text" 
+                  label="Avatar URL" 
+                  error={errors.avatar}
+                />
+              </SimpleGrid>
+            </VStack>
+
+            <Flex mt="8" justify="flex-end">
+              <HStack spacing="4">
+                <NextLink href="/">
+                  <Button colorScheme="whiteAlpha">Cancel</Button>
+                </NextLink>
+                <Button 
+                  type="submit" 
+                  colorScheme="orange"
+                  isLoading={formState.isSubmitting}
+                >
+                  Update profile
+                </Button>
+              </HStack>
+            </Flex>
+          </Box>
+        </Flex>
       </Flex>
-    </Flex>
+    </>
   )
 }
 

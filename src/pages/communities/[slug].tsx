@@ -1,7 +1,9 @@
 import { useContext, useState, useEffect, useRef, RefObject } from "react"
+import Head from "next/head"
 import NextLink from 'next/link'
 import { useRouter } from "next/router"
-import { Flex, Image, Button, Heading, Spinner, Text, Divider, AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter, useDisclosure, CloseButton, Breadcrumb } from "@chakra-ui/react"
+import { Flex, Image, Button, Heading, Spinner, Text, Divider, AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter, useDisclosure, CloseButton
+ } from "@chakra-ui/react"
 import { RiCheckboxMultipleBlankFill, RiGroupLine } from "react-icons/ri"
 
 import { UserContext } from "../../contexts/UserContext"
@@ -62,166 +64,175 @@ export default function Community() {
   }, [user, isSuccess])
   
   return (
-    <Flex direction="column" h="100vh">
-      <Header />
-      <Flex 
-        as="main"
-        w="100%"
-        maxWidth={1480}
-        h="full"
-        mt="10"
-        px="6"
-        mx="auto"
-        direction="column"
-      >
-        { isLoading ? (
+    <>
+      <Head>
+          <title>fandom project | {isSuccess && data.community.name}</title>
+      </Head>
+
+      <Flex direction="column" h="100vh">
+        <Header />
+        <Flex 
+          as="main"
+          w="100%"
+          maxWidth={1480}
+          h="full"
+          mt="10"
+          px="6"
+          mx="auto"
+          direction="column"
+        >
+          { isLoading ? (
+              <Flex justify="center" h="full" align="center">
+                <Spinner />
+              </Flex>
+          ) : error ? (
             <Flex justify="center" h="full" align="center">
-              <Spinner />
+              <Text>Failed to fetch community data.</Text>
             </Flex>
-        ) : error ? (
-          <Flex justify="center" h="full" align="center">
-            <Text>Failed to fetch community data.</Text>
-          </Flex>
-        ) : isSuccess && (
-          <Flex direction="column">
-            <Breadcrumbs 
-              isSecondLevel 
-              previousPage="Communities" 
-              previousPath="communities"
-              currentPage={data.community.name} 
-            />
-
-            <Image
-              src={data.community.bannerImage}
-              alt={data.community.name}
-              borderRadius="4"
-              maxHeight="400px"
-              objectFit="cover"
-            />
-
-            <Flex mt="-75px" align="center">
-              <Image
-                src={data.community.coverImage}
-                alt={data.community.name}
-                border="5px solid white"
-                borderColor="gray.900"
-                ml="58px"
-                width="150px"
-                height="150px"
-                borderRadius="50%"
+          ) : isSuccess && (
+            <Flex direction="column">
+              <Breadcrumbs 
+                isSecondLevel 
+                previousPage="Communities" 
+                previousPath="communities"
+                currentPage={data.community.name} 
               />
 
-              { isSuccess && isOwner ? (
-                <NextLink href={`/my-communities/${data.community.slug}`} passHref>
+              <Image
+                src={data.community.bannerImage}
+                alt={data.community.name}
+                borderRadius="4"
+                maxHeight="400px"
+                objectFit="cover"
+              />
+
+              <Flex mt="-75px" align="center">
+                <Image
+                  src={data.community.coverImage}
+                  alt={data.community.name}
+                  border="5px solid white"
+                  borderColor="gray.900"
+                  ml="58px"
+                  width="150px"
+                  height="150px"
+                  borderRadius="50%"
+                />
+
+                { isSuccess && isOwner ? (
+                  <NextLink href={`/my-communities/${data.community.slug}`} passHref>
+                    <Button 
+                      ml="auto" 
+                      mt="75px" 
+                      colorScheme="orange" 
+                    >
+                      Add post
+                    </Button>
+                  </NextLink>
+                ) : (isSuccess && followedSuccess) && isFollowing ? (
+                  <Button 
+                    ml="auto" 
+                    mt="75px" 
+                    variant="outline" 
+                    _hover={{ 
+                      color: '#E53E3E', 
+                      borderColor: '#E53E3E'
+                    }} 
+                    onClick={() => handleUnfollow(data.community.communityId)}
+                  >
+                    Following
+                  </Button>
+                ) : (
                   <Button 
                     ml="auto" 
                     mt="75px" 
                     colorScheme="orange" 
+                    onClick={() => handleFollow(data.community.communityId)}
                   >
-                    Add post
+                    Follow
                   </Button>
-                </NextLink>
-              ) : (isSuccess && followedSuccess) && isFollowing ? (
-                <Button 
-                  ml="auto" 
-                  mt="75px" 
-                  variant="outline" 
-                  _hover={{ 
-                    color: '#E53E3E', 
-                    borderColor: '#E53E3E'
-                  }} 
-                  onClick={() => handleUnfollow(data.community.communityId)}
-                >
-                  Following
-                </Button>
-              ) : (
-                <Button 
-                  ml="auto" 
-                  mt="75px" 
-                  colorScheme="orange" 
-                  onClick={() => handleFollow(data.community.communityId)}
-                >
-                  Follow
-                </Button>
-              )}
-            </Flex>
-
-            <Heading size="lg" fontWeight="normal" mt="8">
-              {data.community.name}
-              {!isLoading && isFetching && <Spinner size="sm" color="grey-500" ml="4" />}
-            </Heading>
-
-            <Text color="gray.200">
-              @{data.community.slug}
-            </Text>
-
-            <Text mt="4">
-              {data.community.description}
-            </Text>
-
-            <Flex mt="4" gap="6">
-              <Flex align="center">
-                <RiGroupLine />
-                <Text ml="1">{data.community.memberCount}</Text>
+                )}
               </Flex>
 
-              <Flex align="center">
-                <RiCheckboxMultipleBlankFill />
-                <Text ml="1">33</Text>
-              </Flex>
-            </Flex>
+              <Heading size="lg" fontWeight="normal" mt="8">
+                {data.community.name}
+                {!isLoading && isFetching && <Spinner size="sm" color="grey-500" ml="4" />}
+              </Heading>
 
-            <Divider my="6" borderColor="gray.700" />
+              <Text color="gray.200">
+                @{data.community.slug}
+              </Text>
 
-            <Flex flexDir="column" gap={4}>
-              {postsLoading ? (
-                <Flex justify="center" h="full" align="center">
-                  <Spinner />
+              <Text mt="4">
+                {data.community.description}
+              </Text>
+
+              <Flex mt="4" gap="6">
+                <Flex align="center">
+                  <RiGroupLine />
+                  <Text ml="1">{data.community.memberCount}</Text>
                 </Flex>
-              ) : postsSuccess && communityPosts.posts.map(post => (
-                <Post
-                  type={post.type}
-                  title={post.title}
-                  author={post.authorName}
-                  content={post.text}
-                />
-              ))}
+
+                <Flex align="center">
+                  <RiCheckboxMultipleBlankFill />
+                  <Text ml="1">33</Text>
+                </Flex>
+              </Flex>
+
+              <Divider my="6" borderColor="gray.700" />
+
+              <Flex flexDir="column" gap={4}>
+                {postsLoading ? (
+                  <Flex justify="center" h="full" align="center">
+                    <Spinner />
+                  </Flex>
+                ) : postsSuccess && !communityPosts.posts ? (
+                  <Text align="center">It looks like this community doesn't have any posts yet</Text>
+                ) : postsSuccess &&communityPosts.posts.map(post => (
+                  <Post
+                    type={post.type}
+                    title={post.title}
+                    author={post.authorName}
+                    content={post.text}
+                    key={post.title}
+                  />
+                ))}
+              </Flex>
             </Flex>
-          </Flex>
-        )}
-        <AlertDialog
-          isOpen={isOpen}
-          leastDestructiveRef={cancelRef}
-          onClose={onClose}
-        >
-          <AlertDialogOverlay>
-            <AlertDialogContent bgColor='gray.900'>
-              <CloseButton
-                alignSelf='flex-end'
-                position='relative'
-                right={1}
-                top={1}
-                onClick={onClose}
-              />
-              <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                Login Required
-              </AlertDialogHeader>
+          )}
+          <AlertDialog
+            isOpen={isOpen}
+            leastDestructiveRef={cancelRef}
+            onClose={onClose}
+          >
+            <AlertDialogOverlay>
+              <AlertDialogContent bgColor='gray.900'>
+                <CloseButton
+                  alignSelf='flex-end'
+                  position='relative'
+                  right={1}
+                  top={1}
+                  onClick={onClose}
+                />
+                <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                  Login Required
+                </AlertDialogHeader>
 
-              <AlertDialogBody>
-                You must be logged in to follow a fandom community
-              </AlertDialogBody>
+                <AlertDialogBody>
+                  You must be logged in to follow a fandom community
+                </AlertDialogBody>
 
-              <AlertDialogFooter>
-                <NextLink href="/login" passHref>
-                  <Button colorScheme='orange' ml={3}>
-                    Login
-                  </Button>
-                </NextLink>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialogOverlay>
-        </AlertDialog>
+                <AlertDialogFooter>
+                  <NextLink href="/login" passHref>
+                    <Button colorScheme='orange' ml={3}>
+                      Login
+                    </Button>
+                  </NextLink>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialogOverlay>
+          </AlertDialog>
+        </Flex>
       </Flex>
-    </Flex>
+    </>
   )
 }
