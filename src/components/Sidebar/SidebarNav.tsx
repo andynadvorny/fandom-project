@@ -1,6 +1,6 @@
 import { Stack, Box, Text } from "@chakra-ui/react"
 import { MouseEvent, useContext } from "react"
-import { RiUserSettingsLine, RiDashboardLine, RiBubbleChartLine, RiProfileLine, RiLogoutBoxLine } from "react-icons/ri"
+import { RiUserSettingsLine, RiDashboardLine, RiBubbleChartLine, RiShareLine, RiProfileLine, RiLogoutBoxLine } from "react-icons/ri"
 import { UserContext } from "../../contexts/UserContext"
 
 import { NavLink } from "./NavLink"
@@ -20,7 +20,7 @@ export function SidebarNav() {
         <Stack spacing="4" mt="8" align="stretch">
           <NavLink href="/dashboard" icon={RiDashboardLine}>Dashboard</NavLink>
           <NavLink href="/my-communities" icon={RiBubbleChartLine}>My Communities</NavLink>
-          <NavLink href="/following" icon={RiBubbleChartLine}>Following</NavLink>
+          <NavLink href="/following" icon={RiShareLine}>Following</NavLink>
           <NavLink href="/feed" icon={RiProfileLine}>News Feed</NavLink>
         </Stack>
       </Box>
