@@ -18,6 +18,7 @@ import { Select } from '../../../components/Form/Select'
 import { Textarea } from '../../../components/Form/Textarea'
 import { ConfirmDelete } from '../../../components/Modals/ConfirmDelete'
 import { UserContext } from '../../../contexts/UserContext'
+import { Breadcrumbs } from '../../../components/Breadcrumbs'
 
 type Community = {
   name: string;
@@ -96,81 +97,94 @@ export default function CommunityPost() {
       <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
         <Sidebar />
 
-        <Box 
-          flex="1" 
-          borderRadius={8} 
-          bg="gray.800" 
-          p="6"
-          maxW={800}
-        >
-          <Flex>
-            <Heading size="lg" fontWeight="normal">
-              {data?.community.name}
-              {isFetching && <Spinner size="sm" color="grey-500" ml="4" />}
-            </Heading>
-            <Menu>
-              <MenuButton as={Button} ml="auto" colorScheme="orange" px={0}>
-                <Icon as={RiMenuLine} fontSize={24} mx="auto" mt={1} />
-              </MenuButton>
-              <MenuList>
-                <MenuItem color="gray.900">View Page</MenuItem>
-                <MenuItem color="gray.900">Edit</MenuItem>
-                <MenuItem onClick={onDeleteOpen} color="red.500">Delete Community</MenuItem>
-              </MenuList>
-            </Menu>
-          </Flex>
-
-          <Divider my="6" borderColor="gray.700" />
-          
-          { isLoading ? (
-            <Spinner />
-          ) : error ? (
-            <Text>Can&apos;t load community data</Text>
-          ) : isSuccess && (
-            <Box as="form" onSubmit={handleSubmit(handleCreatePost)}>
-              <VStack spacing="6">
-                <Select
-                  {...register('posttype')}
-                  name="posttype"
-                  label="Post Type" 
-                  options={postTypeOptions}
-                  error={errors.posttype}
-                />
-
-                <Input
-                  {...register('title')}
-                  name="title"
-                  label="Title" 
-                  error={errors.title}
-                />  
-
-                <Textarea
-                  {...register('content')}
-                  name="content" 
-                  label="Content" 
-                  error={errors.content}
-                />
-              </VStack>
-
-              <Flex mt="8" justify="flex-end">
-                <HStack spacing="4">
-                  <NextLink href="/my-communities">
-                    <Button colorScheme="whiteAlpha">Cancel</Button>
-                  </NextLink>
-                  <Button 
-                    type="submit" 
-                    colorScheme="orange"
-                    isLoading={formState.isSubmitting}
-                  >
-                    Post
-                  </Button>
-                </HStack>
-              </Flex>
-            </Box>
+        <Flex flexDir="column" flex="1" maxW={800} gap={2}>
+          {isSuccess && (
+            <Breadcrumbs 
+              isSecondLevel 
+              previousPage="My Communities" 
+              previousPath="my-communities"
+              currentPage={data.community.name} 
+            />
           )}
+          <Box 
+            borderRadius={8} 
+            bg="gray.800" 
+            p="6"
+          >
+            <Flex>
+              <Heading size="lg" fontWeight="normal">
+                {data?.community.name}
+                {isFetching && <Spinner size="sm" color="grey-500" ml="4" />}
+              </Heading>
+              <Menu>
+                <MenuButton as={Button} ml="auto" colorScheme="orange" px={0}>
+                  <Icon as={RiMenuLine} fontSize={24} mx="auto" mt={1} />
+                </MenuButton>
+                <MenuList>
+                  <NextLink href={`/communities/${data?.community.slug}`}>
+                    <MenuItem color="gray.900">View Page</MenuItem>
+                  </NextLink>
+                  <NextLink href={`/my-communities/${data?.community.slug}/edit`}>
+                    <MenuItem color="gray.900">Edit</MenuItem>
+                  </NextLink>
+                  <MenuItem onClick={onDeleteOpen} color="red.500">Delete Community</MenuItem>
+                </MenuList>
+              </Menu>
+            </Flex>
 
-          <ConfirmDelete isOpen={isDeleteOpen} onClose={onDeleteClose} cancelRef={cancelDeleteRef} handleDelete={handleDeleteCommunity} />
-        </Box>
+            <Divider my="6" borderColor="gray.700" />
+            
+            { isLoading ? (
+              <Spinner />
+            ) : error ? (
+              <Text>Can&apos;t load community data</Text>
+            ) : isSuccess && (
+              <Box as="form" onSubmit={handleSubmit(handleCreatePost)}>
+                <VStack spacing="6">
+                  <Select
+                    {...register('posttype')}
+                    name="posttype"
+                    label="Post Type" 
+                    options={postTypeOptions}
+                    error={errors.posttype}
+                  />
+
+                  <Input
+                    {...register('title')}
+                    name="title"
+                    label="Title" 
+                    error={errors.title}
+                  />  
+
+                  <Textarea
+                    {...register('content')}
+                    name="content" 
+                    label="Content" 
+                    error={errors.content}
+                  />
+                </VStack>
+
+                <Flex mt="8" justify="flex-end">
+                  <HStack spacing="4">
+                    <NextLink href="/my-communities">
+                      <Button colorScheme="whiteAlpha">Cancel</Button>
+                    </NextLink>
+                    <Button 
+                      type="submit" 
+                      colorScheme="orange"
+                      isLoading={formState.isSubmitting}
+                    >
+                      Post
+                    </Button>
+                  </HStack>
+                </Flex>
+              </Box>
+            )}
+
+            <ConfirmDelete isOpen={isDeleteOpen} onClose={onDeleteClose} cancelRef={cancelDeleteRef} handleDelete={handleDeleteCommunity} />
+          </Box>
+        </Flex>
+        
       </Flex>
     </Flex>
   )

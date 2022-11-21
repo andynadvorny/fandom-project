@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect, useRef, RefObject } from "react"
 import NextLink from 'next/link'
 import { useRouter } from "next/router"
-import { Flex, Image, Button, Heading, Spinner, Text, Divider, AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter, useDisclosure, CloseButton } from "@chakra-ui/react"
+import { Flex, Image, Button, Heading, Spinner, Text, Divider, AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter, useDisclosure, CloseButton, Breadcrumb } from "@chakra-ui/react"
 import { RiCheckboxMultipleBlankFill, RiGroupLine } from "react-icons/ri"
 
 import { UserContext } from "../../contexts/UserContext"
@@ -9,6 +9,7 @@ import { useCommunityBySlug } from "../../hooks/useCommunityBySlug"
 import { useCommunitiesFollowed } from "../../hooks/useCommunitiesFollowed"
 import { useCommunityPosts } from "../../hooks/useCommunityPosts"
 import { Header } from "../../components/Header"
+import { Breadcrumbs } from "../../components/Breadcrumbs"
 import { Post } from "../../components/Post"
 
 export default function Community() {
@@ -73,7 +74,6 @@ export default function Community() {
         mx="auto"
         direction="column"
       >
-
         { isLoading ? (
             <Flex justify="center" h="full" align="center">
               <Spinner />
@@ -84,6 +84,13 @@ export default function Community() {
           </Flex>
         ) : isSuccess && (
           <Flex direction="column">
+            <Breadcrumbs 
+              isSecondLevel 
+              previousPage="Communities" 
+              previousPath="communities"
+              currentPage={data.community.name} 
+            />
+
             <Image
               src={data.community.bannerImage}
               alt={data.community.name}

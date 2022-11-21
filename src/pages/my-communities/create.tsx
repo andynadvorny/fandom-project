@@ -5,16 +5,18 @@ import { useForm } from 'react-hook-form'
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup'
 
-//import { withSSRAuth } from "../../utils/withSSRAuth"
+import { withSSRAuth } from "../../utils/withSSRAuth"
 import { CommunitiesContext } from '../../contexts/CommunityContext'
+import { UserContext } from '../../contexts/UserContext';
 import { useCategories } from '../../hooks/useCategories'
+
 import { Header } from "../../components/Header"
 import { Sidebar } from "../../components/Sidebar"
+import { Breadcrumbs } from '../../components/Breadcrumbs';
 import { CommunityPreview } from '../../components/CommunityPreview'
 import { Input } from '../../components/Form/Input'
 import { Select } from '../../components/Form/Select'
 import { Textarea } from '../../components/Form/Textarea'
-import { UserContext } from '../../contexts/UserContext';
 
 const createCommunityFormSchema = yup.object().shape({
   name: yup.string().required('Name is required'),
@@ -62,91 +64,98 @@ export default function CreateCommunity() {
       <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
         <Sidebar />
 
-        <Box 
-          flex="1" 
-          borderRadius={8} 
-          bg="gray.800" 
-          p="6"
-          maxW={800}
-        >
-          <Heading size="lg" fontWeight="normal">Create Community</Heading>
-
-          <Divider my="6" borderColor="gray.700" />
-
-          <CommunityPreview
-            name={previewName}
-            categoryName="Category"
-            coverImage={previewCoverImage}
-            description={previewDescription}
+        <Flex flexDir="column" flex="1" maxW={800} gap={2}>
+          <Breadcrumbs 
+            isSecondLevel 
+            previousPage="My Communities" 
+            previousPath="my-communities"
+            currentPage="Create Community" 
           />
-          
-          <Box as="form" onSubmit={handleSubmit(handleCreateCommunity)}>
-            <VStack spacing="6">
-              <Input
-                {...register('name')}
-                name="name"
-                label="Name" 
-                error={errors.name}
-                onChange={(e) => {setPreviewName(e.target.value)}}
-              />
-              
-              <Select
-                {...register('category')}
-                name="category"
-                label="Category" 
-                options={categoryOptions}
-                error={errors.category}
-              />
 
-              <Input 
-                {...register('coverimage')}
-                name="coverimage" 
-                label="Cover image" 
-                error={errors.coverimage}
-                placeholder="https://yourimage.com/image.jpg"
-                onChange={(e) => {setPreviewCoverImage(e.target.value)}}
-              />
+          <Box 
+            borderRadius={8} 
+            bg="gray.800" 
+            p="6"
+          >
+            <Heading size="lg" fontWeight="normal">Create Community</Heading>
 
-              <Input 
-                {...register('bannerimage')}
-                name="bannerimage" 
-                label="Banner image" 
-                error={errors.bannerimage}
-                placeholder="https://yourimage.com/image.jpg"
-              />
+            <Divider my="6" borderColor="gray.700" />
 
-              <Textarea
-                {...register('description')}
-                name="description" 
-                label="Description" 
-                error={errors.description}
-                onChange={(e) => {setPreviewDescription(e.target.value)}}
-              />
-            </VStack>
+            <CommunityPreview
+              name={previewName}
+              categoryName="Category"
+              coverImage={previewCoverImage}
+              description={previewDescription}
+            />
+            
+            <Box as="form" onSubmit={handleSubmit(handleCreateCommunity)}>
+              <VStack spacing="6">
+                <Input
+                  {...register('name')}
+                  name="name"
+                  label="Name" 
+                  error={errors.name}
+                  onChange={(e) => {setPreviewName(e.target.value)}}
+                />
+                
+                <Select
+                  {...register('category')}
+                  name="category"
+                  label="Category" 
+                  options={categoryOptions}
+                  error={errors.category}
+                />
 
-            <Flex mt="8" justify="flex-end">
-              <HStack spacing="4">
-                <NextLink href="/my-communities">
-                  <Button colorScheme="whiteAlpha">Cancel</Button>
-                </NextLink>
-                <Button 
-                  type="submit" 
-                  colorScheme="orange"
-                  isLoading={formState.isSubmitting}
-                >
-                  Create community
-                </Button>
-              </HStack>
-            </Flex>
+                <Input 
+                  {...register('coverimage')}
+                  name="coverimage" 
+                  label="Cover image" 
+                  error={errors.coverimage}
+                  placeholder="https://yourimage.com/image.jpg"
+                  onChange={(e) => {setPreviewCoverImage(e.target.value)}}
+                />
+
+                <Input 
+                  {...register('bannerimage')}
+                  name="bannerimage" 
+                  label="Banner image" 
+                  error={errors.bannerimage}
+                  placeholder="https://yourimage.com/image.jpg"
+                />
+
+                <Textarea
+                  {...register('description')}
+                  name="description" 
+                  label="Description" 
+                  error={errors.description}
+                  onChange={(e) => {setPreviewDescription(e.target.value)}}
+                />
+              </VStack>
+
+              <Flex mt="8" justify="flex-end">
+                <HStack spacing="4">
+                  <NextLink href="/my-communities">
+                    <Button colorScheme="whiteAlpha">Cancel</Button>
+                  </NextLink>
+                  <Button 
+                    type="submit" 
+                    colorScheme="orange"
+                    isLoading={formState.isSubmitting}
+                  >
+                    Create community
+                  </Button>
+                </HStack>
+              </Flex>
+            </Box>
           </Box>
-        </Box>
+        </Flex>
       </Flex>
     </Flex>
   )
 }
 
-// export const getServerSideProps = withSSRAuth(async (ctx) => {
-//   return {
-//     props: {}
-//   }
-// })
+export const getServerSideProps = withSSRAuth(async (ctx) => {
+  return {
+    props: {}
+  }
+})

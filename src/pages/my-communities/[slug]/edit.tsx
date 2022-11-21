@@ -18,6 +18,7 @@ import { Input } from '../../../components/Form/Input'
 import { Select } from '../../../components/Form/Select'
 import { Textarea } from '../../../components/Form/Textarea'
 import { ConfirmDelete } from '../../../components/Modals/ConfirmDelete'
+import { Breadcrumbs } from '../../../components/Breadcrumbs'
 
 type Community = {
   name: string;
@@ -105,96 +106,107 @@ export default function CommunityDetails() {
       <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
         <Sidebar />
 
-        <Box 
-          flex="1" 
-          borderRadius={8} 
-          bg="gray.800" 
-          p="6"
-          maxW={800}
-        >
-          <Flex>
-            <Heading size="lg" fontWeight="normal">
-              {community?.name}
-              {isFetching && <Spinner size="sm" color="grey-500" ml="4" />}
-            </Heading>
-            <Button 
-              onClick={onDeleteOpen}
-              colorScheme="red"
-              ml="auto"
-              px={0}
-              title="Delete"
-            >
-              <RiDeleteBinFill size={20} />
-            </Button>
-          </Flex>
-
-          <Divider my="6" borderColor="gray.700" />
-          
-          { isLoading ? (
-            <Spinner />
-          ) : error ? (
-            <Text>Can&apos;t load community data</Text>
-          ) : isSuccess && (
-            <Box as="form" onSubmit={handleSubmit(handleUpdateCommunity)}>
-              <VStack spacing="6">
-                <Input
-                  {...register('name')}
-                  name="name"
-                  label="Name" 
-                  error={errors.name}
-                />
-                
-                <Select
-                  {...register('category')}
-                  name="category"
-                  label="Category" 
-                  options={categoryOptions}
-                  error={errors.category}
-                />
-
-                <Input 
-                  {...register('coverimage')}
-                  name="coverimage" 
-                  label="Cover image" 
-                  error={errors.coverimage}
-                  placeholder="https://yourimage.com/image.jpg"
-                />
-
-                <Input 
-                  {...register('bannerimage')}
-                  name="bannerimage" 
-                  label="Banner image" 
-                  error={errors.bannerimage}
-                  placeholder="https://yourimage.com/image.jpg"
-                />    
-
-                <Textarea
-                  {...register('description')}
-                  name="description" 
-                  label="Description" 
-                  error={errors.description}
-                />
-              </VStack>
-
-              <Flex mt="8" justify="flex-end">
-                <HStack spacing="4">
-                  <NextLink href="/my-communities">
-                    <Button colorScheme="whiteAlpha">Cancel</Button>
-                  </NextLink>
-                  <Button 
-                    type="submit" 
-                    colorScheme="orange"
-                    isLoading={formState.isSubmitting}
-                  >
-                    Update
-                  </Button>
-                </HStack>
-              </Flex>
-            </Box>
+        <Flex flexDir="column" flex="1" maxW={800} gap={2}>
+          {isSuccess && (
+            <Breadcrumbs 
+              isSecondLevel 
+              previousPage="My Communities" 
+              previousPath="my-communities"
+              currentPage={data.community.name} 
+            />
           )}
 
-          <ConfirmDelete isOpen={isDeleteOpen} onClose={onDeleteClose} cancelRef={cancelDeleteRef} handleDelete={handleDeleteCommunity} />
-        </Box>
+          <Box 
+            flex="1" 
+            borderRadius={8} 
+            bg="gray.800" 
+            p="6"
+            maxW={800}
+          >
+            <Flex>
+              <Heading size="lg" fontWeight="normal">
+                {community?.name}
+                {isFetching && <Spinner size="sm" color="grey-500" ml="4" />}
+              </Heading>
+              <Button 
+                onClick={onDeleteOpen}
+                colorScheme="red"
+                ml="auto"
+                px={0}
+                title="Delete"
+              >
+                <RiDeleteBinFill size={20} />
+              </Button>
+            </Flex>
+
+            <Divider my="6" borderColor="gray.700" />
+            
+            { isLoading ? (
+              <Spinner />
+            ) : error ? (
+              <Text>Can&apos;t load community data</Text>
+            ) : isSuccess && (
+              <Box as="form" onSubmit={handleSubmit(handleUpdateCommunity)}>
+                <VStack spacing="6">
+                  <Input
+                    {...register('name')}
+                    name="name"
+                    label="Name" 
+                    error={errors.name}
+                  />
+                  
+                  <Select
+                    {...register('category')}
+                    name="category"
+                    label="Category" 
+                    options={categoryOptions}
+                    error={errors.category}
+                  />
+
+                  <Input 
+                    {...register('coverimage')}
+                    name="coverimage" 
+                    label="Cover image" 
+                    error={errors.coverimage}
+                    placeholder="https://yourimage.com/image.jpg"
+                  />
+
+                  <Input 
+                    {...register('bannerimage')}
+                    name="bannerimage" 
+                    label="Banner image" 
+                    error={errors.bannerimage}
+                    placeholder="https://yourimage.com/image.jpg"
+                  />    
+
+                  <Textarea
+                    {...register('description')}
+                    name="description" 
+                    label="Description" 
+                    error={errors.description}
+                  />
+                </VStack>
+
+                <Flex mt="8" justify="flex-end">
+                  <HStack spacing="4">
+                    <NextLink href="/my-communities">
+                      <Button colorScheme="whiteAlpha">Cancel</Button>
+                    </NextLink>
+                    <Button 
+                      type="submit" 
+                      colorScheme="orange"
+                      isLoading={formState.isSubmitting}
+                    >
+                      Update
+                    </Button>
+                  </HStack>
+                </Flex>
+              </Box>
+            )}
+
+            <ConfirmDelete isOpen={isDeleteOpen} onClose={onDeleteClose} cancelRef={cancelDeleteRef} handleDelete={handleDeleteCommunity} />
+          </Box>
+        </Flex>
       </Flex>
     </Flex>
   )
