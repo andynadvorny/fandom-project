@@ -2,12 +2,14 @@ import { useContext, useState, useEffect, useRef, RefObject } from "react"
 import NextLink from 'next/link'
 import { useRouter } from "next/router"
 import { Flex, Image, Button, Heading, Spinner, Text, Divider, AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter, useDisclosure, CloseButton } from "@chakra-ui/react"
+import { RiCheckboxMultipleBlankFill, RiGroupLine } from "react-icons/ri"
 
 import { UserContext } from "../../contexts/UserContext"
 import { useCommunityBySlug } from "../../hooks/useCommunityBySlug"
-import { Header } from "../../components/Header"
-import { RiCheckboxMultipleBlankFill, RiGroupLine } from "react-icons/ri"
 import { useCommunitiesFollowed } from "../../hooks/useCommunitiesFollowed"
+import { useCommunityPosts } from "../../hooks/useCommunityPosts"
+import { Header } from "../../components/Header"
+import { Post } from "../../components/Post"
 
 export default function Community() {
   const router = useRouter()
@@ -15,6 +17,7 @@ export default function Community() {
   
   const { data, isSuccess, isLoading, isFetching, error } = useCommunityBySlug(slug)
   const { data : followedCommunities, isSuccess : followedSuccess } = useCommunitiesFollowed()
+  const { data : communityPosts, isSuccess : postsSuccess, isLoading : postsLoading } = useCommunityPosts(data?.community.communityId)
   const { user, followCommunity, unfollowCommunity } = useContext(UserContext)
 
   const [isFollowing, setIsFollowing] = useState<boolean>()
@@ -70,6 +73,7 @@ export default function Community() {
         mx="auto"
         direction="column"
       >
+
         { isLoading ? (
             <Flex justify="center" h="full" align="center">
               <Spinner />
@@ -162,7 +166,20 @@ export default function Community() {
 
             <Divider my="6" borderColor="gray.700" />
 
-            content goes here
+            <Flex flexDir="column" gap={4}>
+              {postsLoading ? (
+                <Flex justify="center" h="full" align="center">
+                  <Spinner />
+                </Flex>
+              ) : postsSuccess && communityPosts.posts.map(post => (
+                <Post
+                  type={post.type}
+                  title={post.title}
+                  author={post.authorName}
+                  content={post.text}
+                />
+              ))}
+            </Flex>
           </Flex>
         )}
         <AlertDialog
