@@ -37,7 +37,6 @@ type PostData = {
 
 type CreatePostVariables = {
   post: PostData;
-  communityId: number; 
   communitySlug: string;
 }
 
@@ -119,8 +118,8 @@ export function CommunitiesProvider({ children }: CommunitiesContextProviderProp
     }
   })
 
-  const createPost = useMutation(async ({ post, communityId, communitySlug }: CreatePostVariables) => {
-    const url = `/communities/${communityId}/posts`
+  const createPost = useMutation(async ({ post, communitySlug }: CreatePostVariables) => {
+    const url = `/communities/${communitySlug}/posts`
 
     try {
       const response = await axios.post(url, post)
@@ -140,6 +139,7 @@ export function CommunitiesProvider({ children }: CommunitiesContextProviderProp
   }, {
     onSuccess : () => {
       queryClient.invalidateQueries('community posts')
+      queryClient.invalidateQueries('community by slug')
     }
   })
 

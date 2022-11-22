@@ -13,8 +13,8 @@ type GetPostsResponse = {
   posts: Post[];
 }
 
-export async function getCommunityPosts(id: number): Promise<GetPostsResponse> {
-  const { data } =  await axios.get(`/communities/${id}/posts`)
+export async function getCommunityPosts(slug: string): Promise<GetPostsResponse> {
+  const { data } =  await axios.get(`/communities/${slug}/posts`)
   
   const posts = data.body
 
@@ -23,9 +23,9 @@ export async function getCommunityPosts(id: number): Promise<GetPostsResponse> {
   }
 }
 
-export function useCommunityPosts(communityId: number) {
-  return useQuery(['community posts', communityId], () => getCommunityPosts(communityId), {
+export function useCommunityPosts(slug: string) {
+  return useQuery(['community posts', slug], () => getCommunityPosts(slug), {
     staleTime: 1000 * 60 * 10,
-    enabled: communityId != undefined
+    enabled: slug.length > 0
   })
 }

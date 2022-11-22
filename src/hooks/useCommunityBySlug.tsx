@@ -8,6 +8,7 @@ type Community = {
   bannerImage: string;
   description: string; 
   memberCount: number;
+  postCount: number;
   name: string;
   slug: string;
   ownerId: number;

@@ -68,7 +68,6 @@ export default function CommunityPost() {
           type: formData.posttype,
           userId: user.id
         },
-        communityId: data.community.communityId,
         communitySlug: data.community.slug
       })
     }

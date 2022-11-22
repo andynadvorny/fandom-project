@@ -2,11 +2,11 @@ import { useContext, useEffect, useState, useRef, RefObject } from 'react'
 import { useRouter } from "next/router"
 import Head from 'next/head'
 import NextLink from 'next/link'
-import { Flex, Box, Heading, Divider, Button, VStack, HStack, Spinner, useDisclosure, Text, Image } from "@chakra-ui/react"
+import { Flex, Box, Heading, Divider, Button, VStack, HStack, Spinner, useDisclosure, Text, Image, Avatar } from "@chakra-ui/react"
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup'
-import { RiDeleteBinFill } from "react-icons/ri"
+import { RiDeleteBinFill, RiBubbleChartLine } from "react-icons/ri"
 
 import { withSSRAuth } from "../../../utils/withSSRAuth"
 import { CommunitiesContext } from '../../../contexts/CommunityContext'
@@ -157,20 +157,17 @@ export default function CommunityDetails() {
                   maxHeight="350px"
                   objectFit="cover"
                   w="100%"
-                  fallbackSrc='https://via.placeholder.com/800x350'
+                  fallbackSrc='https://img.freepik.com/free-photo/yellow-watercolor-paper_95678-446.jpg?w=1380&t=st=1668261837~exp=1668262437~hmac=214ee1a747a0c025424c3bda7fe63e6109322fa1960f40c0c0a7f2aadcf93c78'
                 /> 
 
-                <Image
-                  src={coverPreview}
-                  alt={community?.name}
-                  border="5px solid white"
-                  borderColor="gray.900"
-                  ml="58px"
+                <Avatar 
+                  icon={<RiBubbleChartLine fontSize="2rem" />} 
+                  src={coverPreview}  
                   width="150px"
                   height="150px"
-                  borderRadius="50%"
+                  ml="58px"
+                  border="5px solid #181B23"
                   mt="-75px"
-                  fallbackSrc='https://via.placeholder.com/150'
                 />
               </Box>
 

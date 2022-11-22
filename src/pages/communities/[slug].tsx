@@ -2,9 +2,9 @@ import { useContext, useState, useEffect, useRef, RefObject } from "react"
 import Head from "next/head"
 import NextLink from 'next/link'
 import { useRouter } from "next/router"
-import { Flex, Image, Button, Heading, Spinner, Text, Divider, AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter, useDisclosure, CloseButton
+import { Flex, Image, Button, Heading, Spinner, Text, Divider, Avatar, AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter, useDisclosure, CloseButton
  } from "@chakra-ui/react"
-import { RiCheckboxMultipleBlankFill, RiGroupLine } from "react-icons/ri"
+import { RiCheckboxMultipleBlankFill, RiGroupLine, RiBubbleChartLine } from "react-icons/ri"
 
 import { UserContext } from "../../contexts/UserContext"
 import { useCommunityBySlug } from "../../hooks/useCommunityBySlug"
@@ -20,7 +20,7 @@ export default function Community() {
   
   const { data, isSuccess, isLoading, isFetching, error } = useCommunityBySlug(slug)
   const { data : followedCommunities, isSuccess : followedSuccess } = useCommunitiesFollowed()
-  const { data : communityPosts, isSuccess : postsSuccess, isLoading : postsLoading } = useCommunityPosts(data?.community.communityId)
+  const { data : communityPosts, isSuccess : postsSuccess, isLoading : postsLoading } = useCommunityPosts(slug)
   const { user, followCommunity, unfollowCommunity } = useContext(UserContext)
 
   const [isFollowing, setIsFollowing] = useState<boolean>()
@@ -104,18 +104,17 @@ export default function Community() {
                 borderRadius="4"
                 maxHeight="400px"
                 objectFit="cover"
+                fallbackSrc='https://img.freepik.com/free-photo/yellow-watercolor-paper_95678-446.jpg?w=1380&t=st=1668261837~exp=1668262437~hmac=214ee1a747a0c025424c3bda7fe63e6109322fa1960f40c0c0a7f2aadcf93c78'
               />
 
               <Flex mt="-75px" align="center">
-                <Image
-                  src={data.community.coverImage}
-                  alt={data.community.name}
-                  border="5px solid white"
-                  borderColor="gray.900"
-                  ml="58px"
+                <Avatar 
+                  icon={<RiBubbleChartLine fontSize="2rem" />} 
+                  src={data.community.coverImage}  
                   width="150px"
                   height="150px"
-                  borderRadius="50%"
+                  ml="58px"
+                  border="5px solid #181B23"
                 />
 
                 { isSuccess && isOwner ? (
@@ -174,7 +173,7 @@ export default function Community() {
 
                 <Flex align="center">
                   <RiCheckboxMultipleBlankFill />
-                  <Text ml="1">33</Text>
+                  <Text ml="1">{data.community.postCount}</Text>
                 </Flex>
               </Flex>
 
