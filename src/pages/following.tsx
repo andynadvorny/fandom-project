@@ -33,7 +33,7 @@ export default function Following() {
           >
             <Flex align="center" justify="space-between">
               <Heading size="lg" fontWeight="normal">
-                Following {isSuccess && `(${data?.communities.length})`}
+                Following {isSuccess && data.communities ? `(${data?.communities.length})` : `(0)`}
                 {!isLoading && isFetching && <Spinner size="sm" color="grey-500" ml="4" />}
               </Heading>
             </Flex>
@@ -71,7 +71,7 @@ export default function Following() {
                     </Button>
                   </NextLink>
                 </Flex>
-              ) : isSuccess && (
+              ) : (isSuccess && data.communities) && (
                 <SimpleGrid 
                   minChildWidth='300px'
                   spacing={10}
