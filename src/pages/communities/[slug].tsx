@@ -66,7 +66,7 @@ export default function Community() {
   return (
     <>
       <Head>
-          <title>fandom project | {isSuccess && data.community.name}</title>
+          <title>{`fandom project | ${isSuccess && data.community.name}`}</title>
       </Head>
 
       <Flex direction="column" h="100vh">
@@ -192,6 +192,8 @@ export default function Community() {
                     title={post.title}
                     author={post.authorName}
                     content={post.text}
+                    coverImage={post.coverImage}
+                    eventDate={post.eventDate}
                     key={post.title}
                   />
                 ))}

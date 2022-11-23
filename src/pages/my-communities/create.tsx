@@ -110,6 +110,7 @@ export default function CreateCommunity() {
                     label="Category" 
                     options={categoryOptions}
                     error={errors.category}
+                    placeholder=" "
                   />
 
                   <Input 

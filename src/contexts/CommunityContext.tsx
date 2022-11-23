@@ -32,6 +32,8 @@ type PostData = {
   title: string;
   type: string;
   userId: number;
+  eventDate: Date;
+  coverImage: string;
   text: string;
 }
 

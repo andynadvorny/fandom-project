@@ -107,7 +107,7 @@ export default function CommunityDetails() {
   return (
     <>
       <Head>
-          <title>fandom project | edit {isSuccess && data.community.name}</title>
+          <title>{`fandom project | edit ${isSuccess && data.community.name}`}</title>
       </Head>
 
       <Flex direction="column" h="100vh">

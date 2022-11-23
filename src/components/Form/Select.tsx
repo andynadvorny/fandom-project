@@ -17,7 +17,6 @@ const SelectBase: ForwardRefRenderFunction<HTMLSelectElement, SelectProps>
       <FormControl isInvalid={!!error}>
         { label && <FormLabel htmlFor={name}>{label}</FormLabel> }
         <ChakraSelect 
-          placeholder=" "
           name={name} 
           id={name} 
           focusBorderColor="orange.500"

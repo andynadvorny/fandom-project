@@ -7,6 +7,8 @@ type Post = {
   title: string;
   type: string;
   text: string;
+  coverImage: string;
+  eventDate: Date;
 }
 
 type GetPostsResponse = {

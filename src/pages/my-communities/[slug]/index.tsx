@@ -1,4 +1,4 @@
-import { useContext, useRef, RefObject } from 'react'
+import { useContext, useState, useRef, RefObject } from 'react'
 import { useRouter } from "next/router"
 import Head from 'next/head'
 import NextLink from 'next/link'
@@ -21,10 +21,12 @@ import { ConfirmDelete } from '../../../components/Modals/ConfirmDelete'
 import { UserContext } from '../../../contexts/UserContext'
 import { Breadcrumbs } from '../../../components/Breadcrumbs'
 
-const updateCommunityFormSchema = yup.object().shape({
+const updateCommunityFormSchema = () => yup.object().shape({
   title: yup.string().required('Title is required'),
   posttype: yup.string().required('You must pick a post type'),
   content: yup.string().required('Content is required'),
+  eventdate: yup.date(),
+  coverimage: yup.string()
 })
 
 export default function CommunityPost() {
@@ -51,8 +53,10 @@ export default function CommunityPost() {
     }
   ]
 
+  const [postType, setPostType] = useState('post')
+
   const { register, handleSubmit, formState } = useForm({
-    resolver: yupResolver(updateCommunityFormSchema)
+    resolver: yupResolver(updateCommunityFormSchema())
   })
   const errors = formState.errors
 
@@ -66,6 +70,8 @@ export default function CommunityPost() {
           title: formData.title,
           text: formData.content,
           type: formData.posttype,
+          eventDate: formData.eventdate,
+          coverImage: formData.coverimage,
           userId: user.id
         },
         communitySlug: data.community.slug
@@ -82,7 +88,7 @@ export default function CommunityPost() {
   return (
     <>
       <Head>
-          <title>fandom project | {isSuccess && data.community.name}</title>
+          <title>{`fandom project | ${isSuccess && data.community.name}`}</title>
       </Head>
 
       <Flex direction="column" h="100vh">
@@ -141,7 +147,27 @@ export default function CommunityPost() {
                       label="Post Type" 
                       options={postTypeOptions}
                       error={errors.posttype}
+                      onChange={(e) => setPostType(e.target.value)}
                     />
+
+                    {postType === 'event' && (
+                      <Input
+                        {...register('eventdate')}
+                        name="eventdate"
+                        label="Date" 
+                        error={errors.eventdate}
+                        type="date"
+                      /> 
+                    )}
+
+                    {postType === 'post' && (
+                      <Input
+                        {...register('coverimage')}
+                        name="coverimage"
+                        label="Image" 
+                        error={errors.coverimage}
+                      /> 
+                    )}
 
                     <Input
                       {...register('title')}
