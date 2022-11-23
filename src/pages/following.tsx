@@ -49,25 +49,7 @@ export default function Following() {
                 <Flex justify="center" h="full" align="center">
                   <Text>Failed to fetch communities data.</Text>
                 </Flex>
-              ) : isSuccess && data.communities.length > 0 ? (
-                <SimpleGrid 
-                  minChildWidth='300px'
-                  spacing={10}
-                >
-                  {data.communities.map(community => (
-                    <CommunityCard
-                      name={community.name}
-                      categoryName={community.categoryName}
-                      coverImage={community.coverImage}
-                      bannerImage={community.bannerImage}
-                      description={community.description}
-                      slug={community.slug}
-                      memberCount={community.memberCount}
-                      key={community.communityId}
-                    />
-                  ))}
-                </SimpleGrid>
-              ) : (
+              ) : isSuccess && !data.communities ? (
                 <Flex
                   align="center"
                   direction="column"
@@ -89,6 +71,24 @@ export default function Following() {
                     </Button>
                   </NextLink>
                 </Flex>
+              ) : isSuccess && (
+                <SimpleGrid 
+                  minChildWidth='300px'
+                  spacing={10}
+                >
+                  {data.communities.map(community => (
+                    <CommunityCard
+                      name={community.name}
+                      categoryName={community.categoryName}
+                      coverImage={community.coverImage}
+                      bannerImage={community.bannerImage}
+                      description={community.description}
+                      slug={community.slug}
+                      memberCount={community.memberCount}
+                      key={community.communityId}
+                    />
+                  ))}
+                </SimpleGrid>
               )}
             </Flex>  
           </Box>

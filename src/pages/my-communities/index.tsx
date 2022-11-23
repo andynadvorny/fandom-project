@@ -58,56 +58,7 @@ export default function MyCommunities() {
                 <Flex justify="center" h="full" align="center">
                   <Text>Failed to fetch communities data.</Text>
                 </Flex>
-              ) : isSuccess && data.communities.length > 0 ? (
-                data.communities.map(community => (
-                  <Flex 
-                    as={motion.div}
-                    key={community.communityId}
-                    bg="gray.900" 
-                    borderRadius={6} 
-                    p={2} 
-                    alignItems="center"
-                    whileHover={{
-                      scale: 1.03,
-                      transition: { duration: 0.5 },
-                    }}
-                  >
-                    <Avatar 
-                      icon={<RiBubbleChartLine fontSize="2rem" />} 
-                      src={community.coverImage} 
-                      borderRadius={4} 
-                      size="lg" 
-                    />
-                    
-                    <NextLink href={`/communities/${community.slug}`} key={community.communityId} passHref>
-                      <Box as='a' ml='3'>
-                        <Flex align="center" gap={2}>
-                          <Text fontWeight='bold' fontSize="xl">
-                            {community.name}
-                          </Text>
-                          <Badge colorScheme='orange' variant="solid">
-                            {community.categoryName}
-                          </Badge>
-                        </Flex>
-                        <Text fontSize='sm'>{community.memberCount} members</Text>
-                      </Box>
-                    </NextLink>
-
-                    <NextLink href={`/my-communities/${community.slug}`} passHref>
-                      <Button
-                        as="a" 
-                        colorScheme="orange"
-                        variant="ghost"
-                        ml="auto"
-                        px={0}
-                        title="Edit"
-                      >
-                        <RiPencilLine size={18} />
-                      </Button>
-                    </NextLink>
-                  </Flex>
-                ))
-              ) : (
+              ) : isSuccess && !data.communities ? (
                 <Flex
                   align="center"
                   direction="column"
@@ -129,7 +80,54 @@ export default function MyCommunities() {
                     </Button>
                   </NextLink>
                 </Flex>
-              )}
+              ) : isSuccess && data.communities.map(community => (
+                <Flex 
+                  as={motion.div}
+                  key={community.communityId}
+                  bg="gray.900" 
+                  borderRadius={6} 
+                  p={2} 
+                  alignItems="center"
+                  whileHover={{
+                    scale: 1.03,
+                    transition: { duration: 0.5 },
+                  }}
+                >
+                  <Avatar 
+                    icon={<RiBubbleChartLine fontSize="2rem" />} 
+                    src={community.coverImage} 
+                    borderRadius={4} 
+                    size="lg" 
+                  />
+                  
+                  <NextLink href={`/communities/${community.slug}`} key={community.communityId} passHref>
+                    <Box as='a' ml='3'>
+                      <Flex align="center" gap={2}>
+                        <Text fontWeight='bold' fontSize="xl">
+                          {community.name}
+                        </Text>
+                        <Badge colorScheme='orange' variant="solid">
+                          {community.categoryName}
+                        </Badge>
+                      </Flex>
+                      <Text fontSize='sm'>{community.memberCount} members</Text>
+                    </Box>
+                  </NextLink>
+
+                  <NextLink href={`/my-communities/${community.slug}`} passHref>
+                    <Button
+                      as="a" 
+                      colorScheme="orange"
+                      variant="ghost"
+                      ml="auto"
+                      px={0}
+                      title="Edit"
+                    >
+                      <RiPencilLine size={18} />
+                    </Button>
+                  </NextLink>
+                </Flex>
+              ))}
             </Flex>  
           </Box>
         </Flex>

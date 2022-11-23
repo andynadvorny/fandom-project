@@ -186,7 +186,7 @@ export default function Community() {
                   </Flex>
                 ) : postsSuccess && !communityPosts.posts ? (
                   <Text align="center">It looks like this community doesn&apos;t have any posts yet</Text>
-                ) : postsSuccess &&communityPosts.posts.map(post => (
+                ) : postsSuccess && communityPosts.posts.map(post => (
                   <Post
                     type={post.type}
                     title={post.title}
