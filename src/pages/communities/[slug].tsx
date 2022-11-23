@@ -185,7 +185,7 @@ export default function Community() {
                     <Spinner />
                   </Flex>
                 ) : postsSuccess && !communityPosts.posts ? (
-                  <Text align="center">It looks like this community doesn't have any posts yet</Text>
+                  <Text align="center">It looks like this community doesn&apos;t have any posts yet</Text>
                 ) : postsSuccess &&communityPosts.posts.map(post => (
                   <Post
                     type={post.type}
