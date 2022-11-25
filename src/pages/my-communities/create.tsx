@@ -50,7 +50,8 @@ export default function CreateCommunity() {
 
   const { categories } = useCategories()
   const [ previewName, setPreviewName ] = useState<string>('My Awesome Community')
-  const [ previewCoverImage, setPreviewCoverImage ] = useState<string>('')
+  const [ previewCoverImage, setPreviewCoverImage ] = useState<string>('')  
+  const [ previewBannerImage, setPreviewBannerImage ] = useState<string>('')
   const [ previewDescription, setPreviewDescription ] = useState<string>("This is what your community will look like. Don't worry, you can change everything later.")
 
   const categoryOptions = categories.map(category => ({
@@ -89,8 +90,8 @@ export default function CreateCommunity() {
 
               <CommunityPreview
                 name={previewName}
-                categoryName="Category"
                 coverImage={previewCoverImage}
+                bannerImage={previewBannerImage}
                 description={previewDescription}
               />
               
@@ -128,6 +129,7 @@ export default function CreateCommunity() {
                     label="Banner image" 
                     error={errors.bannerimage}
                     placeholder="https://yourimage.com/image.jpg"
+                    onChange={(e) => {setPreviewBannerImage(e.target.value)}}
                   />
 
                   <Textarea

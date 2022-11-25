@@ -1,59 +1,51 @@
-import { Avatar, Flex, Text, Badge } from "@chakra-ui/react"
+import { Avatar, Flex, Text, Image, Heading } from "@chakra-ui/react"
 import { RiBubbleChartLine } from "react-icons/ri"
 
 interface CommunityPreviewProps {
   name: string;
-  categoryName: string;
   coverImage: string;
+  bannerImage: string;
   description: string;
 }
 
-export function CommunityPreview({ name, categoryName, coverImage, description }: CommunityPreviewProps) {
+export function CommunityPreview({ name, coverImage, bannerImage, description }: CommunityPreviewProps) {
   return (
     <Flex 
       bg="gray.900" 
-      borderWidth="2px"
-      borderStyle="dashed"
-      borderColor="gray.700"
       borderRadius={6} 
-      p={4} 
-      alignItems="center"
       mb={8}
-      maxWidth="500px"
       mx="auto"
-      direction={{ base: 'column', md: 'row' }}
+      direction="column"
       gap={4}
     >
+      <Image
+        src={bannerImage}
+        alt={name}
+        borderRadius="4"
+        maxHeight="250px"
+        objectFit="cover"
+        w="100%"
+        fallbackSrc='https://img.freepik.com/free-photo/yellow-watercolor-paper_95678-446.jpg?w=1380&t=st=1668261837~exp=1668262437~hmac=214ee1a747a0c025424c3bda7fe63e6109322fa1960f40c0c0a7f2aadcf93c78'
+      /> 
+
       <Avatar 
         icon={<RiBubbleChartLine fontSize="2rem" />} 
-        src={coverImage} 
-        borderRadius={4} 
-        width="150px"
-        height="150px"
+        src={coverImage}  
+        width="125px"
+        height="125px"
+        ml="58px"
+        border="5px solid #181B23"
+        mt="-75px"
       />
 
-      <Flex 
-        direction="column" 
-        justify="space-between" 
-        height={{ base: 'auto', md: '150px' }}>
-        <Flex 
-          gap={2}
-          justify="space-between"
-          direction={{ base: 'column', md: 'row' }}
-          align={{ base: 'center', md: 'start' }}
-        >
-          <Text 
-            fontWeight='bold' 
-            fontSize="xl" 
-            align={{ base: 'center', md: 'start' }}
-          >
-            {name}
-          </Text>
-          <Badge colorScheme='orange' variant="solid">
-            {categoryName}
-          </Badge>
-        </Flex>
-        <Text fontSize='sm' mt={2} textAlign={{ base: 'center', md: 'left' }}>{description}</Text>
+      <Flex flexDir="column" p={4}>
+        <Heading size="md" fontWeight="normal">
+          {name}
+        </Heading>
+
+        <Text mt="4">
+          {description}
+        </Text>
       </Flex>
     </Flex>
   )
