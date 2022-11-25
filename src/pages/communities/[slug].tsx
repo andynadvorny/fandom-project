@@ -46,12 +46,14 @@ export default function Community() {
   }
 
   useEffect(() => {
-    const follows = followedCommunities?.communities.find(community => community.communityId === data?.community.communityId)
+    if (followedCommunities?.communities) {
+      const follows = followedCommunities?.communities.find(community => community.communityId === data?.community.communityId)
         
-    if (follows) {
-      setIsFollowing(true)
-    } else {
-      setIsFollowing(false)
+      if (follows) {
+        setIsFollowing(true)
+      } else {
+        setIsFollowing(false)
+      }
     }
   }, [followedCommunities, followedSuccess, isSuccess])
 

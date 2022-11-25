@@ -39,15 +39,18 @@ export function Header() {
           display="flex"
         />
       )}
-      <Text 
-        fontSize={{ base: '2xl', md: '3xl' }}
-        fontWeight="bold" 
-        letterSpacing="tight" 
-        w="64"
-      >
-        fandom
-        <Text as="span" ml="1" color="orange.400">project</Text>
-      </Text>
+      <NextLink href="/" passHref>
+        <Text 
+          fontSize={{ base: '2xl', md: '3xl' }}
+          fontWeight="bold" 
+          letterSpacing="tight" 
+          w="64"
+          cursor="pointer"
+        >
+          fandom
+          <Text as="span" ml="1" color="orange.400">project</Text>
+        </Text>
+      </NextLink>
 
       <Flex align="center" ml="auto">
         {user ? (

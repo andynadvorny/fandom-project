@@ -61,8 +61,8 @@ export function Post( props : PostProps) {
               </Text>
             </Box>
           </Flex>
-          <Flex flexDir="column" ml="4">
-            <Text fontSize="lg" fontWeight="bold">{title}</Text>
+          <Flex flexDir="column" ml="4" flex="1">
+            <Text fontSize="lg" fontWeight="bold" mb={1}>{title}</Text>
             {content}
           </Flex>
         </>
