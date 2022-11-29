@@ -28,7 +28,7 @@ export function Post( props : PostProps) {
     <Flex 
       as="article"
       cursor="pointer"
-      flexDir={type === "event" ? "row" : "column"}
+      flexDir="column"
       bg="gray.900" 
       boxShadow="2xl"
       borderRadius={6} 
@@ -37,7 +37,10 @@ export function Post( props : PostProps) {
       borderColor="orange.500"
     >
       {type === "event" ? (
-        <>
+        <Flex 
+          flexDir={{ base: 'column', md: 'row' }}
+          align={{ base: 'flex-end', md: 'flex-start' }}
+        >
           <Flex 
             flexDir="column"
             borderRadius={8}
@@ -45,6 +48,7 @@ export function Post( props : PostProps) {
             h="100px"
             w="100px"
             align="center"
+            mb={{ base: '2', md: '0' }}
           >
             <Text fontSize="6xl" fontWeight="bold" lineHeight="1" mt="10px">
               {day}
@@ -65,7 +69,7 @@ export function Post( props : PostProps) {
             <Text fontSize="lg" fontWeight="bold" mb={1}>{title}</Text>
             {content}
           </Flex>
-        </>
+        </Flex>
       ) : (
         <>
           {(type === "post" && coverImage) && (
