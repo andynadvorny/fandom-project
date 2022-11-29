@@ -142,6 +142,7 @@ export function CommunitiesProvider({ children }: CommunitiesContextProviderProp
     onSuccess : () => {
       queryClient.invalidateQueries('community posts')
       queryClient.invalidateQueries('community by slug')
+      queryClient.invalidateQueries('posts feed')
     }
   })
 
