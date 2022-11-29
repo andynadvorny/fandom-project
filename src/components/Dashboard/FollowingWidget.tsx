@@ -20,8 +20,9 @@ export function FollowingWidget() {
           </Text>
         ) : (isSuccess && data.communities) && (
           <SimpleGrid 
-            minChildWidth='150px'
+            columns={[2, 4, 5]}
             spacing={5}
+
           >
             {data.communities.slice(0, 5).map((community) => (
               <CommunityLink
