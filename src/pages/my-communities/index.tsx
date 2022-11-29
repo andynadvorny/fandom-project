@@ -90,6 +90,7 @@ export default function MyCommunities() {
                   description={community.description}
                   slug={community.slug}
                   memberCount={community.memberCount}
+                  key={community.communityId}
                 />
               ))}
             </Flex>  

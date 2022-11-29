@@ -31,7 +31,7 @@ export function FeedWidget() {
             overflowY="auto"
           >
             {data.posts.slice(0,3).map(post => (
-              <Flex direction="column" gap={2}>
+              <Flex direction="column" gap={2} key={post.title}>
                 <Flex ml="auto" align="center" gap={2}>
                   <Text fontSize="sm" color="gray.200">@ {post.communityName}</Text>
                   <Avatar 
@@ -48,7 +48,6 @@ export function FeedWidget() {
                   content={post.text}
                   coverImage={post.coverImage}
                   eventDate={post.eventDate}
-                  key={post.title}
                 />
               </Flex>
             ))}

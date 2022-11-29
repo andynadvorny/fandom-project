@@ -79,7 +79,7 @@ export default function Following() {
                   overflowY="auto"
                 >
                   {data.posts.map(post => (
-                    <Flex direction="column" gap={2}>
+                    <Flex direction="column" gap={2} key={post.title}>
                       <Flex ml="auto" align="center" gap={2}>
                         <Text fontSize="sm" color="gray.200">@ {post.communityName}</Text>
                         <Avatar 
