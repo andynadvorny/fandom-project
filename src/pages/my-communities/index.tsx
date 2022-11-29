@@ -8,7 +8,7 @@ import { useCommunitiesByUser } from '../../hooks/useCommunitiesByUser'
 
 import { Header } from "../../components/Header"
 import { Sidebar } from "../../components/Sidebar"
-import { CommunityRow } from '../../components/CommunityRow'
+import { CommunityRow } from '../../components/Communities/CommunityRow'
 
 export default function MyCommunities() {
   const { data, isLoading, isSuccess, error } = useCommunitiesByUser()

@@ -1,5 +1,5 @@
 import NextLink from 'next/link'
-import { Avatar, Flex, Text, Badge, Image, Button } from "@chakra-ui/react"
+import { Avatar, Flex, Text, Badge, Image } from "@chakra-ui/react"
 import { motion } from 'framer-motion'
 import { RiBubbleChartLine, RiGroupLine } from "react-icons/ri"
 

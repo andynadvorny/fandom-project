@@ -7,7 +7,7 @@ import { withSSRAuth } from "../utils/withSSRAuth"
 import { useCommunitiesFollowed } from '../hooks/useCommunitiesFollowed'
 import { Header } from "../components/Header"
 import { Sidebar } from "../components/Sidebar"
-import { CommunityCard } from '../components/CommunityCard'
+import { CommunityCard } from '../components/Communities/CommunityCard'
 
 export default function Following() {
   const { data, isLoading, isSuccess, isFetching, error } = useCommunitiesFollowed()

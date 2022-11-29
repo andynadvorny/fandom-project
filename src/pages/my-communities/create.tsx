@@ -14,7 +14,7 @@ import { useCategories } from '../../hooks/useCategories'
 import { Header } from "../../components/Header"
 import { Sidebar } from "../../components/Sidebar"
 import { Breadcrumbs } from '../../components/Breadcrumbs';
-import { CommunityPreview } from '../../components/CommunityPreview'
+import { CommunityPreview } from '../../components/Communities/CommunityPreview'
 import { Input } from '../../components/Form/Input'
 import { Select } from '../../components/Form/Select'
 import { Textarea } from '../../components/Form/Textarea'

@@ -3,7 +3,7 @@ import { Flex, Heading, SimpleGrid, Spinner, Text } from '@chakra-ui/react'
 
 import { useCommunities } from '../../hooks/useCommunities'
 import { Header } from '../../components/Header'
-import { CommunityCard } from '../../components/CommunityCard'
+import { CommunityCard } from '../../components/Communities/CommunityCard'
 
 export default function Communities() {
   const { data, isLoading, isSuccess, isFetching, error } = useCommunities()
