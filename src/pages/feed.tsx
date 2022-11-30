@@ -75,7 +75,7 @@ export default function Following() {
                 <Flex 
                   direction="column"
                   gap={4}
-                  maxHeight="500px"
+                  maxHeight="750px"
                   overflowY="auto"
                 >
                   {data.posts.map(post => (
